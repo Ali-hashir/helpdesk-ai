@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  chroma:
+    image: chromadb/chroma:latest    # official image :contentReference[oaicite:0]{index=0}
+    restart: unless-stopped
+    environment:
+      IS_PERSISTENT: "TRUE"
+      CHROMA_DB_IMPL: "duckdb"
+    ports:
+      - "${CHROMA_PORT}:8000"
+    volumes:
+      - chromadata:/chroma
+    depends_on:
+      - postgres                      # optional, but lets you swap to PG later
+
+  ollama:
+    image: ollama/ollama:latest       # official image :contentReference[oaicite:1]{index=1}
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    volumes:
+      - ollama:/root/.ollama          # persists downloaded models
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  chromadata:
+  ollama:
