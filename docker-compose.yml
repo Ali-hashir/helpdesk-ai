@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: helpdesk-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - helpnet
+    volumes:
+      - ./:/app      # hot-reload via --reload later if desired
+
+  db:
+    image: postgres:16-alpine
+    container_name: helpdesk-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - helpnet
+
+  n8n:
+    image: n8nio/n8n:latest       # pulls the newest stable OSS tag
+    container_name: helpdesk-n8n
+    environment:
+      - GENERIC_TIMEZONE=Asia/Karachi
+      - N8N_PORT=5678
+      - DB_SQLITE_DATA_MODE=filesystem
+      # later you can switch n8n to Postgres; for MVP sqlite is fine
+      - N8N_PROTOCOL=http
+      - N8N_HOST=localhost
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - helpnet
+    restart: unless-stopped
+
+networks:
+  helpnet:
+
+volumes:
+  pgdata:
+  n8n_data:
