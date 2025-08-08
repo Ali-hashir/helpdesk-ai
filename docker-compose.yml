@@ -44,6 +44,19 @@ services:
     networks:
       - helpnet
     restart: unless-stopped
+  
+  ollama:
+    image: ollama/ollama:latest
+    container_name: helpdesk-ollama
+    ports:
+      - "11434:11434"          # Ollama REST API
+    environment:
+      - OLLAMA_HOST=0.0.0.0    # listen on all interfaces inside container
+    volumes:
+      - ollama_data:/root/.ollama   # persist downloaded models
+    networks:
+      - helpnet
+    restart: unless-stopped
 
 networks:
   helpnet:
@@ -51,3 +64,4 @@ networks:
 volumes:
   pgdata:
   n8n_data:
+  ollama_data:
