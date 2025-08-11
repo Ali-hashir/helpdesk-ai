@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Helpdesk-AI — Tickets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
+    h1 { font-size: 20px; margin: 0 0 12px 0; }
+    form { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    input, select { padding: 8px; border: 1px solid #d1d5db; border-radius: 8px; }
+    button { padding: 8px 12px; border: 0; background: #111827; color: #fff; border-radius: 8px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+    .status { padding: 2px 8px; border-radius: 999px; background: #eef2ff; }
+    .muted { color: #6b7280; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Tickets</h1>
+
+  <form method="get" action="/admin/tickets">
+    <input type="text" name="q" placeholder="Search title/description" value="{{ q }}">
+    <select name="status">
+      <option value="">Any status</option>
+      <option value="open" {% if status=="open" %}selected{% endif %}>open</option>
+      <option value="in_progress" {% if status=="in_progress" %}selected{% endif %}>in_progress</option>
+      <option value="closed" {% if status=="closed" %}selected{% endif %}>closed</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:60px">ID</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th style="width:220px">Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in items %}
+        <tr>
+          <td>#{{ t.id }}</td>
+          <td>
+            <div>{{ t.title }}</div>
+            {% if t.description %}<div class="muted">{{ t.description[:120] }}{% if t.description|length > 120 %}…{% endif %}</div>{% endif %}
+          </td>
+          <td><span class="status">{{ t.status }}</span></td>
+          <td class="muted">{{ t.created_at }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4" class="muted">No tickets found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
