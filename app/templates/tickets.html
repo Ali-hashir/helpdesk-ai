@@ -1,59 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Helpdesk-AI — Tickets</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
-    h1 { font-size: 20px; margin: 0 0 12px 0; }
-    form { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    input, select { padding: 8px; border: 1px solid #d1d5db; border-radius: 8px; }
-    button { padding: 8px 12px; border: 0; background: #111827; color: #fff; border-radius: 8px; cursor: pointer; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
-    .status { padding: 2px 8px; border-radius: 999px; background: #eef2ff; }
-    .muted { color: #6b7280; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <h1>Tickets</h1>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Helpdesk‑AI — Admin Tickets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-full bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100">
+    <div class="pointer-events-none fixed inset-0">
+      <div class="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+      <div class="absolute -right-32 top-40 h-[28rem] w-[28rem] rounded-full bg-cyan-400/20 blur-3xl"></div>
+    </div>
 
-  <form method="get" action="/admin/tickets">
-    <input type="text" name="q" placeholder="Search title/description" value="{{ q }}">
-    <select name="status">
-      <option value="">Any status</option>
-      <option value="open" {% if status=="open" %}selected{% endif %}>open</option>
-      <option value="in_progress" {% if status=="in_progress" %}selected{% endif %}>in_progress</option>
-      <option value="closed" {% if status=="closed" %}selected{% endif %}>closed</option>
-    </select>
-    <button type="submit">Filter</button>
-  </form>
+    <div class="relative mx-auto max-w-7xl px-6 py-8">
+      <header class="mb-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30"></div>
+          <div>
+            <div class="text-lg font-semibold tracking-tight">Helpdesk‑AI Admin</div>
+            <div class="text-xs text-slate-400">Ticket overview</div>
+          </div>
+        </div>
+      </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th style="width:60px">ID</th>
-        <th>Title</th>
-        <th>Status</th>
-        <th style="width:220px">Created</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for t in items %}
-        <tr>
-          <td>#{{ t.id }}</td>
-          <td>
-            <div>{{ t.title }}</div>
-            {% if t.description %}<div class="muted">{{ t.description[:120] }}{% if t.description|length > 120 %}…{% endif %}</div>{% endif %}
-          </td>
-          <td><span class="status">{{ t.status }}</span></td>
-          <td class="muted">{{ t.created_at }}</td>
-        </tr>
-      {% else %}
-        <tr><td colspan="4" class="muted">No tickets found.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</body>
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+        <form method="get" action="/admin/tickets" class="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+          <input
+            type="text"
+            name="q"
+            placeholder="Search title/description"
+            value="{{ q }}"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+          />
+          <select
+            name="status"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
+          >
+            <option value="">Any status</option>
+            <option value="open" {% if status=="open" %}selected{% endif %}>open</option>
+            <option value="in_progress" {% if status=="in_progress" %}selected{% endif %}>in_progress</option>
+            <option value="closed" {% if status=="closed" %}selected{% endif %}>closed</option>
+          </select>
+          <button
+            type="submit"
+            class="rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 px-3 py-2 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)]"
+          >
+            Filter
+          </button>
+        </form>
+
+        <div class="overflow-hidden rounded-2xl border border-white/10">
+          <table class="min-w-full divide-y divide-white/10">
+            <thead class="bg-white/5">
+              <tr class="text-left text-xs uppercase tracking-wide text-slate-300">
+                <th class="px-3 py-2">ID</th>
+                <th class="px-3 py-2">Title</th>
+                <th class="px-3 py-2">Status</th>
+                <th class="px-3 py-2">Created</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10 text-sm">
+              {% for t in items %}
+              <tr class="hover:bg-white/5">
+                <td class="px-3 py-3 align-top text-slate-300">#{{ t.id }}</td>
+                <td class="px-3 py-3">
+                  <div class="font-medium text-white">{{ t.title }}</div>
+                  {% if t.description %}
+                  <div class="text-xs text-slate-400">{{ t.description[:160] }}{% if t.description|length > 160 %}…{% endif %}</div>
+                  {% endif %}
+                </td>
+                <td class="px-3 py-3 align-top">
+                  <span class="inline-flex rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-xs text-white">
+                    {{ t.status }}
+                  </span>
+                </td>
+                <td class="px-3 py-3 align-top text-slate-400">{{ t.created_at }}</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4" class="px-3 py-10 text-center text-slate-400">No tickets found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
