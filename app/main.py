@@ -5,9 +5,21 @@ from sqlalchemy.orm import Session
 from .config import settings
 from .db import Base, engine, SessionLocal
 from . import crud, schemas
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title=settings.app_name)
 templates = Jinja2Templates(directory="app/templates")
+
+ALLOWED = [
+    "https://helpdesk-ai-eight.vercel.app/",
+    "https://n8n-latest-c77l.onrender.com/",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():

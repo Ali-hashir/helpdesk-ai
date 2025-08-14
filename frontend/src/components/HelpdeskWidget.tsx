@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { N8N_BASE } from "../lib/config";
 
 type Result =
   | { action: "answer"; confidence: number; reply_text: string }
@@ -17,7 +18,7 @@ export default function HelpdeskWidget() {
     setResult(null);
 
     try {
-      const res = await fetch("/n8n/webhook/assist-or-ticket", {
+      const res = await fetch(`${N8N_BASE}/webhook/assist-or-ticket`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
