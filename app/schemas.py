@@ -21,3 +21,8 @@ class TicketRead(TicketBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+# ---------- AI Assistant Schemas ----------
+
+class AssistRequest(BaseModel):
+    message: str

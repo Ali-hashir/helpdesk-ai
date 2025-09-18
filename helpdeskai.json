@@ -1,0 +1,331 @@
+{
+  "name": "helpdeskai",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "assist-or-ticket",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        96
+      ],
+      "id": "ab0fce24-2342-4253-bd1c-c8527e10aaab",
+      "name": "Assist or Ticket",
+      "webhookId": "d9feea64-e06f-424e-a889-19158302d45e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d1fe26c5-8475-4979-ac14-a33381bf777e",
+              "leftValue": "={{ $json.decided.action }}",
+              "rightValue": "answer",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "8d0734ec-7830-4c84-b959-7f18a38fdcd5",
+              "leftValue": "={{ $json.decided.confidence }}",
+              "rightValue": 0.75,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "416d8b33-9b2f-4284-b5b4-d8d454b73dbd",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        96
+      ],
+      "id": "bff3fb5e-4a50-4bf5-9570-8259d6095e4a",
+      "name": "Decision"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cd078035-6c3c-4dfe-99b6-fbfccf520e74",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -896,
+        96
+      ],
+      "id": "832748c3-c123-40a3-b479-0d0550ebd96c",
+      "name": "Extract"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "groqApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.1-8b-instant\",\n  \"temperature\": 0,\n  \"response_format\": { \"type\": \"json_object\" },\n  \"messages\": [\n    { \"role\": \"system\", \"content\": \"You are Helpdesk-AI. Reply only in JSON matching: {\\\"action\\\":\\\"answer|escalate\\\",\\\"confidence\\\":number,\\\"short_title\\\":string,\\\"reply_text\\\":string}\" },\n    { \"role\": \"user\", \"content\": \"{{ $json.message }}\" }\n  ]\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -688,
+        96
+      ],
+      "id": "013f08ac-875f-479e-a9ad-b4f83a29119d",
+      "name": "LLM Decide",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AJ4Ak7lmigXxWVQu",
+          "name": "Header Auth account"
+        },
+        "groqApi": {
+          "id": "AUKKp3YbpSiTNQnp",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalizes Groq/OpenAI chat.completions into {$json.decided}\n// Handles: content as string (with/without ```json fences), array parts, and odd wrappers.\n\nfunction safeParseJSON(s) {\n  if (typeof s !== 'string') return null;\n  try { return JSON.parse(s); } catch {}\n  // Fallback: extract first {...} block\n  const m = s.match(/\\{[\\s\\S]*\\}/);\n  if (m) { try { return JSON.parse(m[0]); } catch {} }\n  return null;\n}\n\nlet payload = $json;                     // HTTP Request node output\n\n// Some nodes return {data: {...}} — unwrap if present\nif (payload?.data?.choices) payload = payload.data;\n\n// Extract assistant content (string or parts[])\nlet content = '';\nif (payload?.choices?.length) {\n  const msg = payload.choices[0].message;\n  if (typeof msg?.content === 'string') content = msg.content;\n  else if (Array.isArray(msg?.content)) {\n    content = msg.content.map(p => p?.text ?? p?.content ?? '').join('');\n  }\n}\n\n// Strip code fences if present\ncontent = (content || '').trim()\n  .replace(/^```json\\s*/i, '')\n  .replace(/^```\\s*/i, '')\n  .replace(/```$/i, '')\n  .trim();\n\n// Parse to object or fall back to escalate\nconst decided = safeParseJSON(content) ?? {\n  action: 'escalate',\n  confidence: 0,\n  short_title: 'Support issue',\n  reply_text: ''\n};\n\n// Normalize fields\nif (typeof decided.action === 'string') decided.action = decided.action.toLowerCase();\nif (typeof decided.confidence !== 'number') decided.confidence = 0;\n\nreturn [{ decided, raw: payload, content }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        96
+      ],
+      "id": "04c35b21-1cef-46d2-9d96-2ffaf52af773",
+      "name": "Parse JSON"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c2ed3863-04dd-4f6c-9e8f-9b52383f52b9",
+              "name": "action",
+              "value": "={{ $json.decided.action }}",
+              "type": "string"
+            },
+            {
+              "id": "803f9b4b-dead-4331-b26e-2ac7718af16f",
+              "name": "confidence",
+              "value": "={{ $json.decided.confidence }}",
+              "type": "string"
+            },
+            {
+              "id": "a98e8d6e-1350-44cf-8bf0-42f7372d7886",
+              "name": "reply_text",
+              "value": "={{ $json.decided.reply_text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b1906458-bfe1-4e01-bd82-fec93c4c2a18",
+      "name": "Craft Answer"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://helpdesk-ai-3ho4.onrender.com/tickets",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.decided.short_title || \"Support issue\" }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $jsonOriginal[\"message\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        192
+      ],
+      "id": "0635bcc5-fc94-45e7-b492-9c6aa257e49f",
+      "name": "Create Ticket"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9e96aba2-2982-4f0d-acc9-891e661784c5",
+              "name": "action",
+              "value": "escalate",
+              "type": "string"
+            },
+            {
+              "id": "b3909ed8-d218-4958-b6b6-291c34fa2cad",
+              "name": "ticket_id",
+              "value": "={{ $json[\"id\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f0d69715-e287-46f6-8850-ec0a2d97f0c5",
+              "name": "status",
+              "value": "={{ $json[\"status\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        192
+      ],
+      "id": "ec10f94b-3a8d-4bb9-a90e-800845bd30a9",
+      "name": "Craft Ticket Response"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Assist or Ticket": {
+      "main": [
+        [
+          {
+            "node": "Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract": {
+      "main": [
+        [
+          {
+            "node": "LLM Decide",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Decide": {
+      "main": [
+        [
+          {
+            "node": "Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse JSON": {
+      "main": [
+        [
+          {
+            "node": "Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decision": {
+      "main": [
+        [
+          {
+            "node": "Craft Answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Ticket": {
+      "main": [
+        [
+          {
+            "node": "Craft Ticket Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c8f7630d-f2c4-4cc0-9d5f-780e7358a995",
+  "meta": {
+    "instanceId": "916ccbc527fd2264c3b06ea4d07ae2c6ae8988f560551772e0c28125d1e2477f"
+  },
+  "id": "rbUFyhTh3axC0gYR",
+  "tags": []
+}

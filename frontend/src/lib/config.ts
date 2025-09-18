@@ -1,2 +1,2 @@
 // src/lib/config.ts
-export const N8N_BASE = import.meta.env.VITE_N8N_BASE ?? "http://localhost:5678";
+export const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:8000";
