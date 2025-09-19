@@ -20,6 +20,7 @@ else:
     # Default origins for production/development
     ALLOWED = [
         "https://helpdesk-ai-eight.vercel.app/",
+        "https://helpdesk-ai-eight.vercel.app",
         "https://n8n-latest-c77l.onrender.com/",
         "http://localhost:3000",  # Vite dev server
         "http://localhost:5173",  # Alternative Vite port
