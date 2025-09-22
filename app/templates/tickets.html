@@ -18,9 +18,19 @@
           <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30"></div>
           <div>
             <div class="text-lg font-semibold tracking-tight">Helpdesk‑AI Admin</div>
-            <div class="text-xs text-slate-400">Ticket overview</div>
+            <div class="text-xs text-slate-400">
+              {% if admin %}Welcome, {{ admin.username }}{% else %}Ticket overview{% endif %}
+            </div>
           </div>
         </div>
+        {% if admin %}
+        <button
+          onclick="logout()"
+          class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10"
+        >
+          Logout
+        </button>
+        {% endif %}
       </header>
 
       <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
@@ -86,5 +96,13 @@
         </div>
       </div>
     </div>
+
+    <script>
+      function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
+    </script>
   </body>
 </html>

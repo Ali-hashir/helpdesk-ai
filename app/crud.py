@@ -2,8 +2,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from . import models, schemas
 
-def create_ticket(db: Session, ticket_in: schemas.TicketCreate) -> models.Ticket:
-    ticket = models.Ticket(**ticket_in.dict())
+def create_ticket(db: Session, ticket_in: schemas.TicketCreate, user_id: int = None) -> models.Ticket:
+    ticket_data = ticket_in.dict()
+    if user_id:
+        ticket_data["user_id"] = user_id
+    ticket = models.Ticket(**ticket_data)
     db.add(ticket)
     db.commit()
     db.refresh(ticket)

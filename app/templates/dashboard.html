@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard — Helpdesk‑AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-full bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100">
+    <div class="pointer-events-none fixed inset-0">
+      <div class="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+      <div class="absolute -right-32 top-40 h-[28rem] w-[28rem] rounded-full bg-cyan-400/20 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-4xl px-6 py-8">
+      <!-- Header -->
+      <header class="mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30"></div>
+          <div>
+            <div class="text-lg font-semibold tracking-tight">Welcome, {{ user.username }}!</div>
+            <div class="text-xs text-slate-400">Ask anything - I'm here to help</div>
+          </div>
+        </div>
+        <button
+          onclick="logout()"
+          class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10"
+        >
+          Logout
+        </button>
+      </header>
+
+      <!-- AI Assistant Widget -->
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+        <div class="mx-auto w-full max-w-xl">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold tracking-tight">Helpdesk‑AI Assistant</h2>
+            <div class="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/70">
+              beta
+            </div>
+          </div>
+
+          <!-- Conversation area -->
+          <div id="conversation" class="mt-4 rounded-xl border border-white/10 bg-black/30 p-3 text-sm text-slate-200 shadow-inner">
+            <div class="text-slate-400">Ask about any IT issue. I'll propose a fix or open a ticket.</div>
+          </div>
+
+          <!-- Form -->
+          <form id="assistantForm" class="mt-4 grid gap-3">
+            <textarea
+              id="messageInput"
+              class="min-h-28 w-full resize-y rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none backdrop-blur transition focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+              placeholder="Describe your issue…"
+              rows="4"
+              required
+            ></textarea>
+            <button
+              type="submit"
+              id="submitBtn"
+              class="relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-fuchsia-500 to-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_-10px_rgba(244,114,182,0.6)] transition focus:outline-none enabled:hover:scale-[1.02] disabled:opacity-60"
+            >
+              <span id="btnText" class="relative z-10">Ask</span>
+              <span id="btnIcon" class="relative z-10 text-base">→</span>
+            </button>
+          </form>
+
+          <div class="mt-2 text-[11px] text-slate-400">We may open a ticket automatically if a human expert is needed.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check if user is logged in
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!token) {
+        window.location.href = '/login';
+      }
+
+      function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
+
+      // AI Assistant functionality
+      document.getElementById('assistantForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const messageInput = document.getElementById('messageInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const conversation = document.getElementById('conversation');
+        const message = messageInput.value.trim();
+        
+        if (!message) return;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.textContent = 'Thinking…';
+        btnIcon.style.display = 'none';
+        
+        // Clear previous result
+        conversation.innerHTML = '<div class="text-slate-400">Processing your request...</div>';
+        
+        try {
+          const response = await fetch('/webhook/assist-or-ticket', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ message })
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            
+            if (result.action === 'answer') {
+              conversation.innerHTML = `
+                <div class="space-y-2">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
+                    <span>AI Answer</span>
+                    <span class="ml-1 inline-block rounded-full bg-emerald-400/20 px-1.5 py-0.5 text-[10px] text-emerald-200">
+                      ${Math.round(result.confidence * 100)}%
+                    </span>
+                  </div>
+                  <p class="whitespace-pre-wrap leading-relaxed text-slate-200">${result.reply_text}</p>
+                </div>
+              `;
+            } else if (result.action === 'escalate') {
+              conversation.innerHTML = `
+                <div class="space-y-2">
+                  <div class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-cyan-300">
+                    Ticket Created
+                  </div>
+                  <p>
+                    We've opened ticket <b>#${result.ticket_id}</b> (status: <b>${result.status}</b>). Our team will follow up.
+                  </p>
+                </div>
+              `;
+            }
+          } else {
+            const error = await response.json();
+            conversation.innerHTML = `
+              <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200">
+                ⚠️ ${error.detail || 'Something went wrong'}
+              </div>
+            `;
+          }
+        } catch (error) {
+          conversation.innerHTML = `
+            <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200">
+              ⚠️ Network error. Please try again.
+            </div>
+          `;
+        } finally {
+          submitBtn.disabled = false;
+          btnText.textContent = 'Ask';
+          btnIcon.style.display = 'inline';
+          messageInput.value = '';
+        }
+      });
+    </script>
+  </body>
+</html>
+

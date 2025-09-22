@@ -30,6 +30,11 @@ class Settings(BaseSettings):
     groq_api_key: str = ""  # Groq API key for LLM integration
     groq_model: str = "llama-3.1-8b-instant"  # Groq model to use
     confidence_threshold: float = 0.75  # Minimum confidence to provide AI answer
+    
+    # Authentication Configuration
+    secret_key: str = "your-secret-key-change-this-in-production"  # JWT secret key
+    algorithm: str = "HS256"  # JWT algorithm
+    access_token_expire_hours: int = 24  # Token expiration in hours
 
 
     model_config = SettingsConfigDict(

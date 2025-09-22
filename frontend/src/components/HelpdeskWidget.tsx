@@ -18,9 +18,19 @@ export default function HelpdeskWidget() {
     setResult(null);
 
     try {
+      // Get token from localStorage if available
+      const token = localStorage.getItem('token');
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const res = await fetch(`${API_BASE}/webhook/assist-or-ticket`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ message }),
       });
       if (!res.ok) {
