@@ -111,3 +111,14 @@ class ConversationWithMessages(ConversationRead):
     messages: List[MessageRead] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+# ---------- History Schemas ----------
+
+class QueryHistoryItem(BaseModel):
+    conversation_id: int
+    question: str
+    answer: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

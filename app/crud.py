@@ -216,3 +216,57 @@ def update_conversation_title(db: Session, conversation_id: int) -> Optional[mod
         db.refresh(conversation)
     
     return conversation
+
+# ---------- History helpers ----------
+
+def get_user_query_history(
+    db: Session,
+    user_id: Optional[int],
+    limit: int = 50,
+) -> List[schemas.QueryHistoryItem]:
+    """
+    Return a list of latest question/answer pairs per conversation for a user.
+    - question: latest USER message in the conversation
+    - answer: the ASSISTANT message immediately following the latest USER message (if any)
+    Ordered by conversation.updated_at desc.
+    """
+    # First fetch conversations for this user
+    query = db.query(models.Conversation)
+    if user_id is not None:
+        query = query.filter(models.Conversation.user_id == user_id)
+    conversations = query.order_by(desc(models.Conversation.updated_at)).limit(limit).all()
+
+    items: List[schemas.QueryHistoryItem] = []
+    for conv in conversations:
+        # Latest USER message
+        latest_user_msg = (
+            db.query(models.Message)
+            .filter(models.Message.conversation_id == conv.id,
+                    models.Message.role == models.MessageRole.USER)
+            .order_by(models.Message.created_at.desc())
+            .first()
+        )
+        if not latest_user_msg:
+            continue
+
+        # Find the first ASSISTANT message after that user message
+        latest_assistant_msg = (
+            db.query(models.Message)
+            .filter(models.Message.conversation_id == conv.id,
+                    models.Message.role == models.MessageRole.ASSISTANT,
+                    models.Message.created_at >= latest_user_msg.created_at)
+            .order_by(models.Message.created_at.asc())
+            .first()
+        )
+
+        items.append(
+            schemas.QueryHistoryItem(
+                conversation_id=conv.id,
+                question=latest_user_msg.content,
+                answer=latest_assistant_msg.content if latest_assistant_msg else None,
+                created_at=conv.created_at,
+                updated_at=conv.updated_at,
+            )
+        )
+
+    return items

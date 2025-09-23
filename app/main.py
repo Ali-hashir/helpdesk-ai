@@ -8,6 +8,7 @@ from .db import Base, engine, SessionLocal
 from . import crud, schemas, ai, auth, models
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from typing import List
 
 app = FastAPI(title=settings.app_name)
 templates = Jinja2Templates(directory="app/templates")
@@ -148,23 +149,57 @@ async def assist_or_ticket(
     try:
         # Get AI decision from Groq
         decision = await ai.call_groq_api(assist_request.message)
+
+        # Always create a conversation + user message so it appears in history
+        user_id = current_user.id if current_user else None
+        conversation = crud.create_conversation(db, schemas.ConversationCreate(), user_id)
+        crud.create_message(db, conversation.id, assist_request.message, models.MessageRole.USER)
         
-        # Check if we should provide direct answer (matches n8n Decision node logic)
+        # Provide direct answer
         if ai.should_answer_directly(decision):
+            reply_text = decision.get("reply_text", "")
+            confidence = decision.get("confidence", 0.0)
+
+            # Save assistant message
+            crud.create_message(
+                db,
+                conversation.id,
+                reply_text,
+                models.MessageRole.ASSISTANT,
+                ai_confidence=int(confidence * 100) if confidence else None,
+                ai_action="answer",
+            )
+            crud.update_conversation_title(db, conversation.id)
+
             return {
                 "action": "answer",
-                "confidence": decision.get("confidence", 0.0),
-                "reply_text": decision.get("reply_text", "")
+                "confidence": confidence,
+                "reply_text": reply_text,
+                "conversation_id": conversation.id,
             }
         else:
             # AI decided to escalate: create a ticket
             ticket_data = ai.create_ticket_from_decision(assist_request.message, decision)
-            ticket = crud.create_ticket(db, ticket_data, user_id=current_user.id if current_user else None)
+            ticket = crud.create_ticket(db, ticket_data, user_id=user_id)
+
+            # Save assistant message summarizing the escalation
+            confidence = decision.get("confidence", 0.0)
+            ai_response = f"Ticket #{ticket.id} created (status: {ticket.status}). Our team will follow up."
+            crud.create_message(
+                db,
+                conversation.id,
+                ai_response,
+                models.MessageRole.ASSISTANT,
+                ai_confidence=int(confidence * 100) if confidence else None,
+                ai_action="escalate",
+            )
+            crud.update_conversation_title(db, conversation.id)
             
             return {
                 "action": "escalate",
                 "ticket_id": ticket.id,
-                "status": ticket.status
+                "status": ticket.status,
+                "conversation_id": conversation.id,
             }
             
     except Exception as e:
@@ -436,7 +471,7 @@ async def chat(
         conversation = crud.create_conversation(db, schemas.ConversationCreate(), user_id)
         
         # Add user message
-        user_message = crud.create_message(
+        crud.create_message(
             db, 
             conversation.id, 
             chat_request.message, 
@@ -484,3 +519,31 @@ async def chat(
             status_code=500,
             detail=f"Chat service error: {str(e)}"
         )
+
+# ---------- History API ----------
+
+@app.get("/history", response_model=List[schemas.QueryHistoryItem])
+def get_history(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    """Return latest question/answer summary items for the current user."""
+    items = crud.get_user_query_history(db, user_id=current_user.id, limit=50)
+    return items
+
+@app.get("/history/{conversation_id}", response_model=schemas.ConversationWithMessages)
+def get_history_detail(
+    conversation_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    """Return full conversation messages for a given conversation id (owned by user)."""
+    conversation = crud.get_conversation_with_messages(db, conversation_id, current_user.id)
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    conv_data = schemas.ConversationRead.model_validate(conversation)
+    messages_data = [schemas.MessageRead.model_validate(msg) for msg in conversation.messages]
+    return schemas.ConversationWithMessages(
+        **conv_data.model_dump(),
+        messages=messages_data
+    )

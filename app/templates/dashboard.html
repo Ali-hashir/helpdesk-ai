@@ -67,6 +67,32 @@
           <div class="mt-2 text-[11px] text-slate-400">We may open a ticket automatically if a human expert is needed.</div>
         </div>
       </div>
+
+      <!-- Previous Queries -->
+      <div class="relative mt-8 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+        <div class="mx-auto w-full max-w-4xl">
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="text-lg font-semibold tracking-tight">Your previous queries</h2>
+            <button id="refreshHistoryBtn" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10">Refresh</button>
+          </div>
+          <div id="historyList" class="grid gap-3 md:grid-cols-2">
+            <div class="text-slate-400">No history yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="historyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
+        <div class="max-h-[85vh] w-full max-w-2xl overflow-auto rounded-2xl border border-white/10 bg-slate-900 p-5 shadow-xl">
+          <div class="mb-3 flex items-center justify-between">
+            <h3 class="text-base font-semibold">Query details</h3>
+            <button id="modalCloseBtn" class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 hover:bg-white/10">Close</button>
+          </div>
+          <div id="modalBody" class="space-y-4 text-sm">
+            <!-- Filled dynamically -->
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -83,6 +109,94 @@
         localStorage.removeItem('user');
         window.location.href = '/login';
       }
+
+      // Helpers
+      function fmt(str) {
+        return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function openModal(html) {
+        const m = document.getElementById('historyModal');
+        const body = document.getElementById('modalBody');
+        body.innerHTML = html;
+        m.classList.remove('hidden');
+        m.classList.add('flex');
+      }
+      function closeModal() {
+        const m = document.getElementById('historyModal');
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+      }
+      document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+      document.getElementById('historyModal').addEventListener('click', (e) => {
+        if (e.target.id === 'historyModal') closeModal();
+      });
+
+      async function loadHistory() {
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '<div class="text-slate-400">Loading…</div>';
+        try {
+          const res = await fetch('/history', { headers: { 'Authorization': `Bearer ${token}` } });
+          if (!res.ok) throw new Error('Failed to fetch history');
+          const items = await res.json();
+          if (!items.length) {
+            historyList.innerHTML = '<div class="text-slate-400">No history yet.</div>';
+            return;
+          }
+          historyList.innerHTML = '';
+          items.forEach(item => {
+            const card = document.createElement('button');
+            card.className = 'group rounded-xl border border-white/10 bg-white/5 p-3 text-left transition hover:bg-white/10';
+            card.innerHTML = `
+              <div class="line-clamp-2 text-sm text-slate-200">${fmt(item.question)}</div>
+              <div class="mt-2 text-[11px] text-slate-400">Updated: ${new Date(item.updated_at).toLocaleString()}</div>
+            `;
+            card.addEventListener('click', async () => {
+              const res2 = await fetch(`/history/${item.conversation_id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+              if (!res2.ok) return;
+              const detail = await res2.json();
+              // find latest user message and the first assistant message at/after it
+              const msgs = Array.isArray(detail.messages) ? detail.messages : [];
+              let userIdx = -1;
+              for (let i = msgs.length - 1; i >= 0; i--) {
+                const r = (msgs[i].role || '').toString().toLowerCase();
+                if (r === 'user') { userIdx = i; break; }
+              }
+              let userMsg = userIdx >= 0 ? msgs[userIdx] : null;
+              let assistantMsg = null;
+              if (userIdx >= 0) {
+                for (let j = userIdx; j < msgs.length; j++) {
+                  const r = (msgs[j].role || '').toString().toLowerCase();
+                  if (r === 'assistant') { assistantMsg = msgs[j]; break; }
+                }
+              } else {
+                userMsg = msgs.find(m => (m.role || '').toString().toLowerCase() === 'user') || null;
+                assistantMsg = msgs.find(m => (m.role || '').toString().toLowerCase() === 'assistant') || null;
+              }
+              const html = `
+                <div>
+                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400">Question</div>
+                  <div class="rounded-lg border border-white/10 bg-black/30 p-3 text-slate-200">${fmt(userMsg ? userMsg.content : item.question)}</div>
+                </div>
+                <div>
+                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400">Solution</div>
+                  <div class="rounded-lg border border-white/10 bg-black/30 p-3 text-slate-200">${fmt(assistantMsg ? assistantMsg.content : (item.answer || 'No answer recorded.'))}</div>
+                </div>
+              `;
+              openModal(html);
+            });
+            historyList.appendChild(card);
+          });
+        } catch (e) {
+          console.error('Failed to load history', e);
+          historyList.innerHTML = '<div class="text-rose-300">Failed to load history.</div>';
+        }
+      }
+
+      document.getElementById('refreshHistoryBtn').addEventListener('click', loadHistory);
+
+      // Initial load
+      loadHistory();
 
       // AI Assistant functionality
       document.getElementById('assistantForm').addEventListener('submit', async (e) => {
@@ -151,6 +265,7 @@
             `;
           }
         } catch (error) {
+          console.error('Assistant request failed', error);
           conversation.innerHTML = `
             <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200">
               ⚠️ Network error. Please try again.
@@ -161,6 +276,8 @@
           btnText.textContent = 'Ask';
           btnIcon.style.display = 'inline';
           messageInput.value = '';
+          // Refresh history after sending
+          loadHistory();
         }
       });
     </script>
