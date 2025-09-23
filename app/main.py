@@ -7,6 +7,7 @@ from .config import settings
 from .db import Base, engine, SessionLocal
 from . import crud, schemas, ai, auth, models
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 app = FastAPI(title=settings.app_name)
 templates = Jinja2Templates(directory="app/templates")
@@ -40,18 +41,51 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"status": "ok"}
+    return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
+@app.get("/robots.txt", response_class=HTMLResponse)
+async def robots_txt():
+    """Serve robots.txt to prevent 404 errors from web crawlers."""
+    content = """User-agent: *
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /conversations/
+Disallow: /tickets/
+Allow: /
+"""
+    return content
+
+@app.get("/favicon.ico")
+async def favicon():
+    """Serve a minimal favicon to prevent 404 errors from browsers."""
+    # Return a 204 No Content response - browsers will handle this gracefully
+    from fastapi import Response
+    return Response(status_code=204)
 
 @app.on_event("startup")
 def on_startup():
-    """Initialize database tables on startup."""
+    """Initialize database tables on startup only if needed."""
     try:
-        print("🔄 Initializing database...")
-        Base.metadata.create_all(bind=engine)
-        print("✅ Database initialized successfully")
+        from sqlalchemy import inspect
+        
+        # Check if tables already exist
+        inspector = inspect(engine)
+        existing_tables = inspector.get_table_names()
+        
+        # Core tables that should exist
+        required_tables = ["users", "tickets", "conversations", "messages"]
+        missing_tables = [table for table in required_tables if table not in existing_tables]
+        
+        if missing_tables:
+            print(f"🔄 Creating missing database tables: {', '.join(missing_tables)}")
+            Base.metadata.create_all(bind=engine)
+            print("✅ Database tables created successfully")
+        else:
+            print("✅ Database tables already exist, skipping initialization")
+            
     except Exception as e:
         print(f"⚠️  Database initialization warning: {e}")
-        print("💡 You may need to run: python create_tables.py")
+        print("💡 You may need to run the migration script manually")
 
 def get_db():
     db = SessionLocal()
@@ -297,3 +331,156 @@ def admin_tickets(
         "tickets.html",
         {"request": request, "items": items, "q": q or "", "status": status or "", "admin": admin_data},
     )
+
+# ---------- Conversation API Endpoints (Phase 1) ----------
+
+@app.post("/conversations", response_model=schemas.ConversationRead, status_code=status.HTTP_201_CREATED)
+def create_conversation(
+    conversation_in: schemas.ConversationCreate, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """Create a new conversation."""
+    user_id = current_user.id if current_user else None
+    conversation = crud.create_conversation(db, conversation_in, user_id)
+    return schemas.ConversationRead.model_validate(conversation)
+
+@app.get("/conversations", response_model=list[schemas.ConversationRead])
+def list_conversations(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """List conversations for the current user (or all if admin/no auth)."""
+    user_id = current_user.id if current_user else None
+    conversations = crud.get_conversations(db, user_id=user_id, skip=skip, limit=limit)
+    return [schemas.ConversationRead.model_validate(conv) for conv in conversations]
+
+@app.get("/conversations/{conversation_id}", response_model=schemas.ConversationWithMessages)
+def get_conversation(
+    conversation_id: int, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """Get a conversation with all its messages."""
+    user_id = current_user.id if current_user else None
+    conversation = crud.get_conversation_with_messages(db, conversation_id, user_id)
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    
+    # Convert to schema
+    conv_data = schemas.ConversationRead.model_validate(conversation)
+    messages_data = [schemas.MessageRead.model_validate(msg) for msg in conversation.messages]
+    
+    return schemas.ConversationWithMessages(
+        **conv_data.model_dump(),
+        messages=messages_data
+    )
+
+@app.delete("/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_conversation(
+    conversation_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """Delete a conversation."""
+    user_id = current_user.id if current_user else None
+    if not crud.delete_conversation(db, conversation_id, user_id):
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+@app.post("/conversations/{conversation_id}/messages", response_model=schemas.MessageRead, status_code=status.HTTP_201_CREATED)
+def create_message(
+    conversation_id: int,
+    message_in: schemas.MessageCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """Add a message to a conversation."""
+    user_id = current_user.id if current_user else None
+    
+    # Verify conversation exists and user has access
+    conversation = crud.get_conversation(db, conversation_id, user_id)
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    
+    # Create user message
+    message = crud.create_message(
+        db, 
+        conversation_id, 
+        message_in.content, 
+        models.MessageRole.USER
+    )
+    
+    # Update conversation title if not set
+    crud.update_conversation_title(db, conversation_id)
+    
+    return schemas.MessageRead.model_validate(message)
+
+# ---------- Basic Chat Endpoint (Phase 1) ----------
+
+@app.post("/chat", response_model=schemas.ChatResponse)
+async def chat(
+    chat_request: schemas.ChatSendMessage,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user_optional)
+):
+    """
+    Basic chat endpoint - creates conversation and messages, then gets AI response.
+    This is a simplified version for Phase 1 testing.
+    """
+    try:
+        user_id = current_user.id if current_user else None
+        
+        # Create new conversation
+        conversation = crud.create_conversation(db, schemas.ConversationCreate(), user_id)
+        
+        # Add user message
+        user_message = crud.create_message(
+            db, 
+            conversation.id, 
+            chat_request.message, 
+            models.MessageRole.USER
+        )
+        
+        # Get AI response (using existing AI logic)
+        decision = await ai.call_groq_api(chat_request.message)
+        
+        # Determine action and response
+        if ai.should_answer_directly(decision):
+            # AI provides direct answer
+            ai_response = decision.get("reply_text", "I'm here to help!")
+            action = "answer"
+            confidence = decision.get("confidence", 0.0)
+        else:
+            # AI suggests escalation
+            ai_response = f"I'd recommend creating a support ticket for: {decision.get('short_title', 'Support Issue')}"
+            action = "escalate"
+            confidence = decision.get("confidence", 0.0)
+        
+        # Add AI response message
+        ai_message = crud.create_message(
+            db,
+            conversation.id,
+            ai_response,
+            models.MessageRole.ASSISTANT,
+            ai_confidence=int(confidence * 100) if confidence else None,
+            ai_action=action
+        )
+        
+        # Update conversation title
+        crud.update_conversation_title(db, conversation.id)
+        
+        return schemas.ChatResponse(
+            conversation_id=conversation.id,
+            message_id=ai_message.id,
+            response=ai_response,
+            action=action,
+            confidence=confidence
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Chat service error: {str(e)}"
+        )
