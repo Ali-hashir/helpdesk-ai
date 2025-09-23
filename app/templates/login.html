@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login — Helpdesk‑AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="/static/css/theme.css" as="style">
+    <link rel="stylesheet" href="/static/css/theme.css">
   </head>
-  <body class="h-full bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100">
-    <div class="pointer-events-none fixed inset-0">
-      <div class="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
-      <div class="absolute -right-32 top-40 h-[28rem] w-[28rem] rounded-full bg-cyan-400/20 blur-3xl"></div>
+  <body class="min-h-screen text-slate-100 grain vignette">
+    <div class="bg-orbs">
+      <div class="orb f1"></div>
+      <div class="orb f2"></div>
+      <div class="orb f3"></div>
     </div>
 
     <div class="relative flex min-h-full items-center justify-center px-6 py-12">
       <div class="w-full max-w-md">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <div class="glass rounded-3xl p-8">
           <div class="mb-6 text-center">
-            <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30"></div>
+            <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt"></div>
             <h2 class="text-2xl font-semibold tracking-tight">Login to Helpdesk‑AI</h2>
             <p class="mt-2 text-sm text-slate-400">Sign in to access your dashboard</p>
           </div>
@@ -48,11 +51,7 @@
               />
             </div>
 
-            <button
-              type="submit"
-              id="submitBtn"
-              class="w-full rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition hover:scale-[1.02] disabled:opacity-50"
-            >
+            <button type="submit" id="submitBtn" class="btn-funky w-full rounded-xl px-4 py-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition enabled:hover:scale-[1.02] disabled:opacity-50">
               <span id="btnText">Sign In</span>
             </button>
           </form>
@@ -120,6 +119,13 @@
           btnText.textContent = 'Sign In';
         }
       });
+    </script>
+    <script>
+      // Load funky effects
+      const fxScript = document.createElement('script');
+      fxScript.src = '/static/js/fx.js';
+      fxScript.defer = true;
+      document.head.appendChild(fxScript);
     </script>
   </body>
 </html>

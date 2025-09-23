@@ -9,9 +9,11 @@ from . import crud, schemas, ai, auth, models
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from typing import List
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title=settings.app_name)
 templates = Jinja2Templates(directory="app/templates")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Configure CORS origins
 if settings.cors_origins:

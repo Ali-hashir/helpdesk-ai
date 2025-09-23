@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Helpdesk‑AI — Admin Tickets</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="/static/css/theme.css" as="style">
+    <link rel="stylesheet" href="/static/css/theme.css">
   </head>
-  <body class="h-full bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100">
-    <div class="pointer-events-none fixed inset-0">
-      <div class="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
-      <div class="absolute -right-32 top-40 h-[28rem] w-[28rem] rounded-full bg-cyan-400/20 blur-3xl"></div>
+  <body class="min-h-screen text-slate-100 grain vignette">
+    <div class="bg-orbs">
+      <div class="orb f1"></div>
+      <div class="orb f2"></div>
+      <div class="orb f3"></div>
     </div>
 
     <div class="relative mx-auto max-w-7xl px-6 py-8">
       <header class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30"></div>
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt"></div>
           <div>
             <div class="text-lg font-semibold tracking-tight">Helpdesk‑AI Admin</div>
             <div class="text-xs text-slate-400">
@@ -24,42 +27,32 @@
           </div>
         </div>
         {% if admin %}
-        <button
-          onclick="logout()"
-          class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10"
-        >
-          Logout
-        </button>
+        <button onclick="logout()" class="btn-funky rounded-lg px-3 py-2 text-sm">Logout</button>
         {% endif %}
       </header>
 
-      <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+      <div class="glass rounded-3xl p-4">
         <form method="get" action="/admin/tickets" class="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
           <input
             type="text"
             name="q"
             placeholder="Search title/description"
             value="{{ q }}"
-            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 tilt"
           />
           <select
             name="status"
-            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20 tilt"
           >
             <option value="">Any status</option>
             <option value="open" {% if status=="open" %}selected{% endif %}>open</option>
             <option value="in_progress" {% if status=="in_progress" %}selected{% endif %}>in_progress</option>
             <option value="closed" {% if status=="closed" %}selected{% endif %}>closed</option>
           </select>
-          <button
-            type="submit"
-            class="rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 px-3 py-2 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)]"
-          >
-            Filter
-          </button>
+          <button type="submit" class="btn-funky rounded-xl px-3 py-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)]">Filter</button>
         </form>
 
-        <div class="overflow-hidden rounded-2xl border border-white/10">
+        <div class="overflow-hidden rounded-2xl border border-white/10 tilt">
           <table class="min-w-full divide-y divide-white/10">
             <thead class="bg-white/5">
               <tr class="text-left text-xs uppercase tracking-wide text-slate-300">
@@ -71,7 +64,7 @@
             </thead>
             <tbody class="divide-y divide-white/10 text-sm">
               {% for t in items %}
-              <tr class="hover:bg-white/5">
+              <tr class="cursor-pointer transition hover:bg-white/5" data-id="{{ t.id }}" data-title="{{ t.title|e }}" data-desc="{{ (t.description or '')|e }}" data-status="{{ t.status }}" data-created="{{ t.created_at }}">
                 <td class="px-3 py-3 align-top text-slate-300">#{{ t.id }}</td>
                 <td class="px-3 py-3">
                   <div class="font-medium text-white">{{ t.title }}</div>
@@ -80,9 +73,16 @@
                   {% endif %}
                 </td>
                 <td class="px-3 py-3 align-top">
-                  <span class="inline-flex rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-xs text-white">
-                    {{ t.status }}
-                  </span>
+                  {% set s = t.status %}
+                  {% if s == 'open' %}
+                    <span class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-xs text-cyan-200">open</span>
+                  {% elif s == 'in_progress' %}
+                    <span class="inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-xs text-amber-200">in_progress</span>
+                  {% elif s == 'closed' %}
+                    <span class="inline-flex rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-xs text-emerald-200">closed</span>
+                  {% else %}
+                    <span class="inline-flex rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-xs text-white">{{ t.status }}</span>
+                  {% endif %}
                 </td>
                 <td class="px-3 py-3 align-top text-slate-400">{{ t.created_at }}</td>
               </tr>
@@ -97,12 +97,77 @@
       </div>
     </div>
 
+    <!-- Preview Modal -->
+    <div id="ticketModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
+      <div class="max-h-[85vh] w-full max-w-2xl overflow-auto rounded-2xl glass p-5 shadow-xl">
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-base font-semibold">Ticket preview</h3>
+          <button id="ticketModalClose" class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 hover:bg-white/10">Close</button>
+        </div>
+        <div id="ticketModalBody" class="space-y-4 text-sm"></div>
+      </div>
+    </div>
+
     <script>
+      // Load funky effects
+      const fxScript = document.createElement('script');
+      fxScript.src = '/static/js/fx.js';
+      fxScript.defer = true;
+      document.head.appendChild(fxScript);
+
       function logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
       }
+
+      // Row click preview
+      const modal = document.getElementById('ticketModal');
+      const modalBody = document.getElementById('ticketModalBody');
+      const modalClose = document.getElementById('ticketModalClose');
+      modalClose.addEventListener('click', () => { modal.classList.add('hidden'); modal.classList.remove('flex'); });
+      modal.addEventListener('click', (e)=>{ if (e.target.id === 'ticketModal') { modal.classList.add('hidden'); modal.classList.remove('flex'); }});
+
+      document.querySelectorAll('tbody tr[data-id]').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const id = tr.dataset.id;
+          const title = tr.dataset.title || `Ticket #${id}`;
+          const desc = tr.dataset.desc || 'No description';
+          const status = tr.dataset.status || 'unknown';
+          const created = tr.dataset.created || '';
+          const statusBadge = (s) => {
+            const map = {
+              open: 'border-cyan-400/30 bg-cyan-400/10 text-cyan-200',
+              in_progress: 'border-amber-400/30 bg-amber-400/10 text-amber-200',
+              closed: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200'
+            };
+            const cls = map[s] || 'border-white/10 bg-white/10 text-white';
+            return `<span class="inline-flex rounded-full border ${cls} px-2 py-0.5 text-xs">${s}</span>`;
+          };
+          modalBody.innerHTML = `
+            <div>
+              <div class="mb-1 text-xs uppercase tracking-wide text-slate-400">Title</div>
+              <div class="rounded-lg border border-white/10 bg-black/30 p-3">${title}</div>
+            </div>
+            <div>
+              <div class="mb-1 text-xs uppercase tracking-wide text-slate-400">Description</div>
+              <div class="rounded-lg border border-white/10 bg-black/30 p-3">${desc}</div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div>
+                <div class="mb-1 text-xs uppercase tracking-wide text-slate-400">Status</div>
+                ${statusBadge(status)}
+              </div>
+              <div>
+                <div class="mb-1 text-xs uppercase tracking-wide text-slate-400">Created</div>
+                <div class="rounded-lg border border-white/10 bg-black/30 px-2 py-1 text-xs text-slate-300">${created}</div>
+              </div>
+            </div>
+          `;
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
+      });
     </script>
   </body>
 </html>
