@@ -70,6 +70,98 @@
         </div>
       </div>
 
+      <!-- Remote PC Connection Feature -->
+      <div class="relative mt-8 glass rounded-3xl p-6 overflow-hidden">
+        <div class="mx-auto w-full max-w-4xl">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/30 flex items-center justify-center">
+                <svg class="w-4 h-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-lg font-semibold tracking-tight">Remote PC Access</h2>
+                <p class="text-xs text-slate-400">AI fixes your PC remotely via secure connection</p>
+              </div>
+            </div>
+            <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300">
+              powered by NinjaOne
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Connection Status -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-black/20">
+                <div class="flex-shrink-0">
+                  <div id="connectionStatus" class="h-3 w-3 rounded-full bg-red-400 shadow-lg shadow-red-400/50"></div>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-white">PC Connection</div>
+                  <div id="connectionText" class="text-xs text-slate-400">Not connected</div>
+                </div>
+              </div>
+
+              <button 
+                id="connectPcBtn" 
+                class="btn-funky w-full rounded-xl px-4 py-3 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(16,185,129,0.6)] transition enabled:hover:scale-[1.02]"
+              >
+                <span class="flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                  <span id="connectBtnText">Connect My PC</span>
+                </span>
+              </button>
+
+              <button 
+                id="remoteSessionBtn" 
+                class="hidden w-full rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-400/20 hover:scale-[1.02] mt-2"
+              >
+                <span class="flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                  Open Remote Session
+                </span>
+              </button>
+
+              <div class="text-[11px] text-slate-400 leading-relaxed">
+                🔒 Secure RMM connection • 🤖 AI auto-diagnosis • ⚡ Instant fixes
+              </div>
+            </div>
+
+            <!-- AI Capabilities Preview -->
+            <div class="space-y-3">
+              <div class="text-sm font-medium text-slate-300 mb-2">What AI can fix remotely:</div>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <div class="h-1.5 w-1.5 rounded-full bg-cyan-400"></div>
+                  <span>Software installation & updates</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <div class="h-1.5 w-1.5 rounded-full bg-fuchsia-400"></div>
+                  <span>Registry & system optimization</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <div class="h-1.5 w-1.5 rounded-full bg-emerald-400"></div>
+                  <span>Network connectivity issues</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <div class="h-1.5 w-1.5 rounded-full bg-amber-400"></div>
+                  <span>Driver conflicts & hardware setup</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <div class="h-1.5 w-1.5 rounded-full bg-violet-400"></div>
+                  <span>Performance tuning & cleanup</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Previous Queries -->
       <div class="relative mt-8 glass rounded-3xl p-6">
         <div class="mx-auto w-full max-w-5xl">
@@ -83,7 +175,7 @@
         </div>
       </div>
 
-      <!-- Modal -->
+      <!-- History Modal -->
       <div id="historyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
         <div class="max-h-[85vh] w-full max-w-2xl overflow-auto rounded-2xl glass p-5 shadow-xl">
           <div class="mb-3 flex items-center justify-between">
@@ -92,6 +184,109 @@
           </div>
           <div id="modalBody" class="space-y-4 text-sm">
             <!-- Filled dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Remote Session Modal -->
+      <div id="remoteSessionModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4">
+        <div class="h-[90vh] w-full max-w-6xl rounded-2xl glass p-5 shadow-xl flex flex-col">
+          <div class="mb-3 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
+                <svg class="w-3 h-3 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold">Remote Session - DESKTOP-AI-DEMO</h3>
+                <div class="text-xs text-emerald-400">Connected via NinjaOne RMM</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300">
+                Session Active
+              </div>
+              <button id="remoteSessionClose" class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 hover:bg-white/10">End Session</button>
+            </div>
+          </div>
+          
+          <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Terminal/Command Panel -->
+            <div class="lg:col-span-2 rounded-xl border border-white/10 bg-black/40 p-4 flex flex-col">
+              <div class="flex items-center gap-2 mb-3 text-xs text-slate-400">
+                <div class="flex gap-1">
+                  <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                  <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                  <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                </div>
+                <span>AI Terminal Session</span>
+              </div>
+              <div id="terminalOutput" class="flex-1 font-mono text-xs text-green-300 overflow-y-auto min-h-64 bg-black/30 rounded p-3">
+                <div class="text-cyan-400">Microsoft Windows [Version 10.0.19045.3570]</div>
+                <div class="text-cyan-400">(c) Microsoft Corporation. All rights reserved.</div>
+                <div class="mt-2"></div>
+                <div><span class="text-amber-400">C:\Users\User&gt;</span> <span class="text-white">systeminfo | findstr /B /C:"OS Name" /C:"OS Version"</span></div>
+                <div class="text-slate-300">OS Name: Microsoft Windows 10 Pro</div>
+                <div class="text-slate-300">OS Version: 10.0.19045 N/A Build 19045</div>
+                <div class="mt-1"><span class="text-amber-400">C:\Users\User&gt;</span> <span id="currentCommand" class="text-white animate-pulse">_</span></div>
+              </div>
+            </div>
+            
+            <!-- System Info Panel -->
+            <div class="space-y-4">
+              <!-- System Status -->
+              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div class="text-sm font-medium text-white mb-2">System Status</div>
+                <div class="space-y-2 text-xs">
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">CPU Usage:</span>
+                    <span class="text-emerald-400" id="cpuUsage">23%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Memory:</span>
+                    <span class="text-cyan-400" id="memUsage">8.2/16 GB</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Disk C::</span>
+                    <span class="text-amber-400" id="diskUsage">245/500 GB</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Network:</span>
+                    <span class="text-emerald-400">Connected</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- AI Actions -->
+              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div class="text-sm font-medium text-white mb-2">AI Actions</div>
+                <div class="space-y-1.5 text-xs">
+                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-fuchsia-400/20 bg-fuchsia-400/10 text-fuchsia-200 hover:bg-fuchsia-400/20 transition" data-action="scan">
+                    🔍 Run System Scan
+                  </button>
+                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-cyan-400/20 bg-cyan-400/10 text-cyan-200 hover:bg-cyan-400/20 transition" data-action="optimize">
+                    ⚡ Optimize Performance
+                  </button>
+                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-emerald-400/20 bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20 transition" data-action="update">
+                    📦 Update Software
+                  </button>
+                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-amber-400/20 bg-amber-400/10 text-amber-200 hover:bg-amber-400/20 transition" data-action="cleanup">
+                    🧹 Disk Cleanup
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Session Info -->
+              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div class="text-sm font-medium text-white mb-2">Session Info</div>
+                <div class="space-y-1 text-xs text-slate-400">
+                  <div>Started: <span id="sessionStart" class="text-white">--:--</span></div>
+                  <div>Commands: <span id="commandCount" class="text-white">2</span></div>
+                  <div>Status: <span class="text-emerald-400">Active</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -294,6 +489,201 @@
           loadHistory();
         }
       });
+
+      // Remote PC Connection Demo
+      let connectionState = 'disconnected'; // disconnected, connecting, connected
+      const connectBtn = document.getElementById('connectPcBtn');
+      const connectBtnText = document.getElementById('connectBtnText');
+      const connectionStatus = document.getElementById('connectionStatus');
+      const connectionText = document.getElementById('connectionText');
+
+      const updateConnectionUI = (state) => {
+        switch(state) {
+          case 'disconnected':
+            connectionStatus.className = 'h-3 w-3 rounded-full bg-red-400 shadow-lg shadow-red-400/50';
+            connectionText.textContent = 'Not connected';
+            connectBtnText.textContent = 'Connect My PC';
+            connectBtn.disabled = false;
+            break;
+          case 'connecting':
+            connectionStatus.className = 'h-3 w-3 rounded-full bg-amber-400 shadow-lg shadow-amber-400/50 animate-pulse';
+            connectionText.textContent = 'Establishing secure connection...';
+            connectBtnText.textContent = 'Connecting...';
+            connectBtn.disabled = true;
+            break;
+          case 'connected':
+            connectionStatus.className = 'h-3 w-3 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50';
+            connectionText.textContent = 'Connected • AI ready to assist';
+            connectBtnText.textContent = 'Disconnect';
+            connectBtn.disabled = false;
+            break;
+        }
+      };
+
+      connectBtn.addEventListener('click', async () => {
+        if (connectionState === 'disconnected') {
+          connectionState = 'connecting';
+          updateConnectionUI('connecting');
+          
+          // Simulate connection process
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          connectionState = 'connected';
+          updateConnectionUI('connected');
+          
+          // Show Remote Session button
+          document.getElementById('remoteSessionBtn').classList.remove('hidden');
+          
+          // Show success message in conversation area temporarily
+          const conversation = document.getElementById('conversation');
+          const originalContent = conversation.innerHTML;
+          conversation.innerHTML = `
+            <div class="space-y-2">
+              <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                PC Connected
+              </div>
+              <p class="whitespace-pre-wrap leading-relaxed text-slate-200">🎉 Your PC is now connected! AI can now remotely diagnose and fix issues automatically. Try asking about any IT problem or open a remote session.</p>
+            </div>
+          `;
+          
+          // Restore original content after 4 seconds
+          setTimeout(() => {
+            conversation.innerHTML = originalContent;
+          }, 4000);
+          
+        } else if (connectionState === 'connected') {
+          connectionState = 'disconnected';
+          updateConnectionUI('disconnected');
+          
+          // Hide Remote Session button
+          document.getElementById('remoteSessionBtn').classList.add('hidden');
+          
+          // Show disconnection message
+          const conversation = document.getElementById('conversation');
+          const originalContent = conversation.innerHTML;
+          conversation.innerHTML = `
+            <div class="rounded-lg border border-slate-500/30 bg-slate-500/10 p-3 text-slate-200">
+              🔌 PC disconnected. Connect again to enable remote AI assistance.
+            </div>
+          `;
+          
+          setTimeout(() => {
+            conversation.innerHTML = originalContent;
+          }, 3000);
+        }
+      });
+
+      // Remote Session Modal
+      const remoteSessionModal = document.getElementById('remoteSessionModal');
+      const remoteSessionBtn = document.getElementById('remoteSessionBtn');
+      const remoteSessionClose = document.getElementById('remoteSessionClose');
+      let sessionStartTime = null;
+      let commandCounter = 2;
+
+      remoteSessionBtn.addEventListener('click', () => {
+        sessionStartTime = new Date();
+        document.getElementById('sessionStart').textContent = sessionStartTime.toLocaleTimeString();
+        remoteSessionModal.classList.remove('hidden');
+        remoteSessionModal.classList.add('flex');
+        
+        // Start simulated terminal activity
+        startTerminalSimulation();
+      });
+
+      remoteSessionClose.addEventListener('click', () => {
+        remoteSessionModal.classList.add('hidden');
+        remoteSessionModal.classList.remove('flex');
+      });
+
+      remoteSessionModal.addEventListener('click', (e) => {
+        if (e.target.id === 'remoteSessionModal') {
+          remoteSessionModal.classList.add('hidden');
+          remoteSessionModal.classList.remove('flex');
+        }
+      });
+
+      // Terminal simulation
+      const terminalCommands = [
+        { cmd: 'dism /online /cleanup-image /analyzecomponentstore', output: ['Deployment Image Servicing and Management tool', 'Version: 10.0.19041.844', '', 'Component Store (WinSxS) information:', '  Component Store Size : 8.12 GB', '  Shared with Windows : 6.85 GB', '  Backups and Disabled Features : 1.27 GB', '  Cache and Temporary Data : 0 bytes', '', 'Component Store Cleanup Recommended : Yes'] },
+        { cmd: 'sfc /scannow', output: ['Microsoft Windows [Version 10.0.19045.3570]', 'Beginning system scan. This process will take some time.', '', 'Beginning verification phase of system scan.', 'Verification 100% complete.', '', 'Windows Resource Protection found corrupt files and successfully repaired them.', 'Details are included in the CBS.Log windir\\Logs\\CBS\\CBS.log.'] },
+        { cmd: 'powershell "Get-WmiObject Win32_LogicalDisk | Select-Object Size,FreeSpace,DeviceID"', output: ['DeviceID      Size        FreeSpace', '--------      ----        ---------', 'C:       536870912000  268435456000', 'D:       1073741824000  805306368000'] },
+        { cmd: 'netsh wlan show profiles', output: ['Profiles on interface Wi-Fi:', '', 'Group policy profiles (read only)', '---------------------------------', '    <None>', '', 'User profiles', '-------------', '    All User Profile     : HomeNetwork', '    All User Profile     : OfficeWiFi'] }
+      ];
+
+      let currentCmdIndex = 0;
+      let terminalActive = false;
+
+      function startTerminalSimulation() {
+        if (terminalActive) return;
+        terminalActive = true;
+        
+        // Update system stats periodically
+        updateSystemStats();
+        setInterval(updateSystemStats, 3000);
+      }
+
+      function executeAIAction(action) {
+        const terminalOutput = document.getElementById('terminalOutput');
+        const currentCommand = document.getElementById('currentCommand');
+        const commands = {
+          scan: { cmd: 'powershell "Get-ComputerInfo | Select-Object TotalPhysicalMemory,CsProcessors"', output: ['TotalPhysicalMemory : 17179869184', 'CsProcessors        : {Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz}', '', 'AI Analysis: System running optimally. No issues detected.'] },
+          optimize: { cmd: 'powershell "Get-Process | Sort-Object CPU -desc | Select-Object -first 5"', output: ['ProcessName      CPU(s)', '-----------      ------', 'chrome          245.67', 'firefox          89.23', 'code             56.78', 'discord          34.12', 'explorer         12.45', '', 'AI: Optimizing high-CPU processes... Done.'] },
+          update: { cmd: 'powershell "Get-WindowsUpdate -Online"', output: ['Finding available updates...', '', 'KB5034441 - 2024-01 Security Update for Windows 10', 'KB5034763 - 2024-01 Cumulative Update for .NET Framework', '', 'AI: 2 updates available. Installing... Complete.'] },
+          cleanup: { cmd: 'cleanmgr /sagerun:1', output: ['Disk Cleanup is calculating space...', '', 'Found 2.3 GB of temporary files', 'Found 1.7 GB of recycle bin files', 'Found 850 MB of browser cache', '', 'AI: Cleanup complete. 4.85 GB freed.'] }
+        };
+
+        const actionCmd = commands[action];
+        if (!actionCmd) return;
+
+        currentCommand.textContent = actionCmd.cmd;
+        commandCounter++;
+        document.getElementById('commandCount').textContent = commandCounter;
+
+        setTimeout(() => {
+          // Add command to terminal
+          const cmdDiv = document.createElement('div');
+          cmdDiv.innerHTML = `<span class="text-amber-400">C:\\Users\\User&gt;</span> <span class="text-white">${actionCmd.cmd}</span>`;
+          terminalOutput.insertBefore(cmdDiv, currentCommand.parentElement);
+
+          // Add output
+          actionCmd.output.forEach((line, i) => {
+            setTimeout(() => {
+              const outputDiv = document.createElement('div');
+              outputDiv.className = line.startsWith('AI') ? 'text-cyan-300' : 'text-slate-300';
+              outputDiv.textContent = line;
+              terminalOutput.insertBefore(outputDiv, currentCommand.parentElement);
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }, i * 100);
+          });
+
+          setTimeout(() => {
+            currentCommand.textContent = '_';
+          }, actionCmd.output.length * 100 + 500);
+        }, 1000);
+      }
+
+      function updateSystemStats() {
+        // Simulate changing system stats
+        const cpu = Math.floor(Math.random() * 40) + 15;
+        const memUsed = (Math.random() * 4 + 6).toFixed(1);
+        const diskUsed = Math.floor(Math.random() * 50) + 240;
+        
+        document.getElementById('cpuUsage').textContent = `${cpu}%`;
+        document.getElementById('memUsage').textContent = `${memUsed}/16 GB`;
+        document.getElementById('diskUsage').textContent = `${diskUsed}/500 GB`;
+      }
+
+      // AI Action buttons
+      document.querySelectorAll('.ai-action-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.action;
+          executeAIAction(action);
+        });
+      });
+
+      // Initialize connection UI
+      updateConnectionUI('disconnected');
     </script>
   </body>
 </html>
