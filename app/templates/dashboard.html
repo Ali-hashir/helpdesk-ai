@@ -214,13 +214,16 @@
           <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
             <!-- Terminal/Command Panel -->
             <div class="lg:col-span-2 rounded-xl border border-white/10 bg-black/40 p-4 flex flex-col">
-              <div class="flex items-center gap-2 mb-3 text-xs text-slate-400">
-                <div class="flex gap-1">
-                  <div class="w-2 h-2 rounded-full bg-red-400"></div>
-                  <div class="w-2 h-2 rounded-full bg-amber-400"></div>
-                  <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+              <div class="flex items-center justify-between mb-3 text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                  <div class="flex gap-1">
+                    <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                    <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                  </div>
+                  <span>AI Terminal Session</span>
                 </div>
-                <span>AI Terminal Session</span>
+                <div id="sessionContext" class="text-cyan-400 hidden">Fixing: <span id="currentIssue">--</span></div>
               </div>
               <div id="terminalOutput" class="flex-1 font-mono text-xs text-green-300 overflow-y-auto min-h-64 bg-black/30 rounded p-3">
                 <div class="text-cyan-400">Microsoft Windows [Version 10.0.19045.3570]</div>
@@ -322,6 +325,69 @@
       // Helpers
       function fmt(str) {
         return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function checkIfRemoteFixable(issue, solution) {
+        const remoteKeywords = [
+          'install', 'update', 'restart', 'run command', 'registry', 'service', 
+          'driver', 'software', 'system file', 'disk cleanup', 'defrag', 
+          'network', 'firewall', 'permission', 'cache', 'temp files', 'optimize',
+          'configure', 'setting', 'powershell', 'cmd', 'control panel'
+        ];
+        
+        const text = (issue + ' ' + solution).toLowerCase();
+        return remoteKeywords.some(keyword => text.includes(keyword));
+      }
+
+      function initiateContextualRemoteFix(issue, steps) {
+        if (connectionState !== 'connected') {
+          // Show connection prompt with context
+          const conversation = document.getElementById('conversation');
+          conversation.innerHTML = `
+            <div class="space-y-3">
+              <div class="p-3 rounded-lg border border-cyan-400/30 bg-cyan-400/5">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-sm font-medium text-cyan-300">Remote Fix Required</span>
+                </div>
+                <p class="text-xs text-slate-300 mb-3">To automatically fix "<em>${issue.substring(0, 60)}${issue.length > 60 ? '...' : ''}</em>", I need to connect to your PC.</p>
+                <button id="connectForFixBtn" class="btn-funky w-full rounded-lg px-3 py-2 text-xs font-semibold">Connect PC to Start Fix</button>
+              </div>
+            </div>
+          `;
+          
+          document.getElementById('connectForFixBtn').addEventListener('click', () => {
+            // Store the contextual fix info
+            window.pendingRemoteFix = { issue, steps };
+            // Trigger connection
+            document.getElementById('connectPcBtn').click();
+          });
+        } else {
+          // Already connected, start remote session with context
+          startContextualRemoteSession(issue, steps);
+        }
+      }
+
+      function startContextualRemoteSession(issue, steps) {
+        // Store context for the session
+        window.currentRemoteFix = { issue, steps };
+        
+        // Open remote session
+        document.getElementById('remoteSessionBtn').click();
+        
+        // Update UI with context
+        setTimeout(() => {
+          document.getElementById('sessionContext').classList.remove('hidden');
+          document.getElementById('currentIssue').textContent = issue.substring(0, 40) + (issue.length > 40 ? '...' : '');
+          
+          // Auto-start fixing process
+          setTimeout(() => {
+            executeContextualFix();
+          }, 2000);
+        }, 500);
       }
 
       function openModal(html) {
@@ -442,17 +508,49 @@
             const result = await response.json();
             
             if (result.action === 'answer') {
+              // Check if this looks like a technical issue that could be fixed remotely
+              const isRemoteFixable = checkIfRemoteFixable(message, result.reply_text);
+              
+              let remoteOfferHtml = '';
+              if (isRemoteFixable) {
+                remoteOfferHtml = `
+                  <div class="mt-3 p-3 rounded-lg border border-cyan-400/30 bg-cyan-400/5">
+                    <div class="flex items-center gap-2 mb-2">
+                      <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                      </svg>
+                      <span class="text-sm font-medium text-cyan-300">AI Remote Assistance Available</span>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-3">I can perform these steps automatically on your PC if you'd like.</p>
+                    <button id="offerRemoteFixBtn" class="btn-funky w-full rounded-lg px-3 py-2 text-xs font-semibold shadow-[0_8px_20px_-8px_rgba(34,211,238,0.6)]" data-steps="${btoa(result.reply_text)}" data-issue="${btoa(message)}">
+                      🤖 Let AI Fix This Remotely
+                    </button>
+                  </div>
+                `;
+              }
+              
               conversation.innerHTML = `
                 <div class="space-y-2">
                   <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
-                    <span>AI Answer</span>
+                    <span>AI Solution</span>
                     <span class="ml-1 inline-block rounded-full bg-emerald-400/20 px-1.5 py-0.5 text-[10px] text-emerald-200">
                       ${Math.round(result.confidence * 100)}%
                     </span>
                   </div>
                   <p class="whitespace-pre-wrap leading-relaxed text-slate-200">${result.reply_text}</p>
+                  ${remoteOfferHtml}
                 </div>
               `;
+              
+              // Add event listener for remote fix button if it exists
+              const offerBtn = document.getElementById('offerRemoteFixBtn');
+              if (offerBtn) {
+                offerBtn.addEventListener('click', () => {
+                  const steps = atob(offerBtn.dataset.steps);
+                  const issue = atob(offerBtn.dataset.issue);
+                  initiateContextualRemoteFix(issue, steps);
+                });
+              }
             } else if (result.action === 'escalate') {
               conversation.innerHTML = `
                 <div class="space-y-2">
@@ -534,23 +632,46 @@
           // Show Remote Session button
           document.getElementById('remoteSessionBtn').classList.remove('hidden');
           
-          // Show success message in conversation area temporarily
-          const conversation = document.getElementById('conversation');
-          const originalContent = conversation.innerHTML;
-          conversation.innerHTML = `
-            <div class="space-y-2">
-              <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                PC Connected
+          // Check if there's a pending remote fix
+          if (window.pendingRemoteFix) {
+            const { issue, steps } = window.pendingRemoteFix;
+            delete window.pendingRemoteFix;
+            
+            // Show contextual success message
+            const conversation = document.getElementById('conversation');
+            conversation.innerHTML = `
+              <div class="space-y-2">
+                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  PC Connected - Ready to Fix
+                </div>
+                <p class="whitespace-pre-wrap leading-relaxed text-slate-200">🎉 Connected! Starting automatic fix for your issue...</p>
               </div>
-              <p class="whitespace-pre-wrap leading-relaxed text-slate-200">🎉 Your PC is now connected! AI can now remotely diagnose and fix issues automatically. Try asking about any IT problem or open a remote session.</p>
-            </div>
-          `;
-          
-          // Restore original content after 4 seconds
-          setTimeout(() => {
-            conversation.innerHTML = originalContent;
-          }, 4000);
+            `;
+            
+            // Auto-start the contextual remote fix
+            setTimeout(() => {
+              startContextualRemoteSession(issue, steps);
+            }, 2000);
+          } else {
+            // Show general success message
+            const conversation = document.getElementById('conversation');
+            const originalContent = conversation.innerHTML;
+            conversation.innerHTML = `
+              <div class="space-y-2">
+                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  PC Connected
+                </div>
+                <p class="whitespace-pre-wrap leading-relaxed text-slate-200">🎉 Your PC is now connected! AI can now remotely diagnose and fix issues automatically. Try asking about any IT problem or open a remote session.</p>
+              </div>
+            `;
+            
+            // Restore original content after 4 seconds
+            setTimeout(() => {
+              conversation.innerHTML = originalContent;
+            }, 4000);
+          }
           
         } else if (connectionState === 'connected') {
           connectionState = 'disconnected';
@@ -672,6 +793,96 @@
         document.getElementById('cpuUsage').textContent = `${cpu}%`;
         document.getElementById('memUsage').textContent = `${memUsed}/16 GB`;
         document.getElementById('diskUsage').textContent = `${diskUsed}/500 GB`;
+      }
+
+      function executeContextualFix() {
+        if (!window.currentRemoteFix) return;
+        
+        const { issue, steps } = window.currentRemoteFix;
+        const terminalOutput = document.getElementById('terminalOutput');
+        const currentCommand = document.getElementById('currentCommand');
+        
+        // Generate contextual commands based on the issue
+        const contextualCommands = generateFixCommands(issue, steps);
+        
+        let cmdIndex = 0;
+        function runNextCommand() {
+          if (cmdIndex >= contextualCommands.length) {
+            // Show completion message
+            setTimeout(() => {
+              const completionDiv = document.createElement('div');
+              completionDiv.className = 'text-emerald-300 font-semibold';
+              completionDiv.textContent = '✅ AI Fix Complete! Issue resolved successfully.';
+              terminalOutput.insertBefore(completionDiv, currentCommand.parentElement);
+              currentCommand.textContent = '_';
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }, 1000);
+            return;
+          }
+          
+          const cmd = contextualCommands[cmdIndex];
+          currentCommand.textContent = cmd.cmd;
+          commandCounter++;
+          document.getElementById('commandCount').textContent = commandCounter;
+          
+          setTimeout(() => {
+            // Add command to terminal
+            const cmdDiv = document.createElement('div');
+            cmdDiv.innerHTML = `<span class="text-amber-400">C:\\Users\\User&gt;</span> <span class="text-white">${cmd.cmd}</span>`;
+            terminalOutput.insertBefore(cmdDiv, currentCommand.parentElement);
+
+            // Add output
+            cmd.output.forEach((line, i) => {
+              setTimeout(() => {
+                const outputDiv = document.createElement('div');
+                outputDiv.className = line.startsWith('AI') || line.startsWith('✅') ? 'text-cyan-300' : 'text-slate-300';
+                outputDiv.textContent = line;
+                terminalOutput.insertBefore(outputDiv, currentCommand.parentElement);
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+              }, i * 150);
+            });
+
+            setTimeout(() => {
+              cmdIndex++;
+              runNextCommand();
+            }, cmd.output.length * 150 + 1500);
+          }, 1000);
+        }
+        
+        runNextCommand();
+      }
+      
+      function generateFixCommands(issue, steps) {
+        const issueLower = issue.toLowerCase();
+        
+        // Generate contextual commands based on issue type
+        if (issueLower.includes('slow') || issueLower.includes('performance')) {
+          return [
+            { cmd: 'tasklist /svc | findstr /i "high"', output: ['Scanning for high-resource processes...', 'Found 3 processes consuming excessive resources', 'AI: Identifying optimization targets'] },
+            { cmd: 'powershell "Get-Process | Sort-Object CPU -desc | Select-Object -first 5"', output: ['chrome.exe        245.67', 'firefox.exe        89.23', 'teams.exe          56.78', 'AI: Optimizing process priorities...', '✅ Performance improved by 40%'] }
+          ];
+        } else if (issueLower.includes('update') || issueLower.includes('software')) {
+          return [
+            { cmd: 'powershell "Get-WindowsUpdate -Online"', output: ['Checking for available updates...', 'Found 3 critical updates', 'KB5034441 - Security Update', 'KB5034763 - .NET Framework Update', 'AI: Installing updates automatically...'] },
+            { cmd: 'powershell "Install-WindowsUpdate -AcceptAll -AutoReboot:$false"', output: ['Installing updates...', 'Update 1/3 complete', 'Update 2/3 complete', 'Update 3/3 complete', '✅ All updates installed successfully'] }
+          ];
+        } else if (issueLower.includes('network') || issueLower.includes('internet') || issueLower.includes('wifi')) {
+          return [
+            { cmd: 'ipconfig /release && ipconfig /renew', output: ['Releasing IP configuration...', 'Renewing IP configuration...', 'AI: Refreshing network settings'] },
+            { cmd: 'netsh winsock reset', output: ['Resetting Winsock catalog...', 'Successfully reset the Winsock Catalog', 'AI: Network stack refreshed', '✅ Network connectivity restored'] }
+          ];
+        } else if (issueLower.includes('disk') || issueLower.includes('storage') || issueLower.includes('space')) {
+          return [
+            { cmd: 'cleanmgr /sagerun:1', output: ['Analyzing disk usage...', 'Found 2.3 GB temporary files', 'Found 1.7 GB recycle bin files', 'AI: Cleaning disk space...'] },
+            { cmd: 'powershell "Get-ChildItem -Path C:\\temp -Recurse | Remove-Item -Force"', output: ['Removing temporary files...', 'Cleared 4.2 GB of disk space', '✅ Disk cleanup completed successfully'] }
+          ];
+        } else {
+          // Generic fix commands
+          return [
+            { cmd: 'sfc /scannow', output: ['Scanning system files...', 'Windows Resource Protection found corrupt files', 'AI: Repairing system integrity...', '✅ System files repaired'] },
+            { cmd: 'powershell "Restart-Service -Name Themes,AudioSrv,BITS -Force"', output: ['Restarting essential services...', 'Service restart complete', 'AI: System services optimized', '✅ Issue resolved successfully'] }
+          ];
+        }
       }
 
       // AI Action buttons
