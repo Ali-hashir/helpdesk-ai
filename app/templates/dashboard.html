@@ -18,33 +18,40 @@
 
     <div class="relative mx-auto max-w-5xl px-6 py-10">
       <!-- Header -->
-      <header class="mb-8 flex items-center justify-between">
+      <header class="mb-8 flex items-center justify-between stagger-item">
         <div class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt"></div>
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt glow-fuchsia"></div>
           <div>
             <div class="text-xl font-semibold tracking-tight">Welcome, {{ user.username }}!</div>
             <div class="text-xs text-slate-400">Ask anything — I’ll fix it or open a ticket</div>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <a href="/admin/tickets" class="hidden rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10" id="adminLink">Admin</a>
+          <a href="/admin/tickets" class="hidden rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:scale-105 hover:shadow-lg" id="adminLink">Admin</a>
           <button onclick="logout()" class="btn-funky rounded-lg px-3 py-2 text-sm">Logout</button>
         </div>
       </header>
 
       <!-- AI Assistant Widget -->
-      <div class="glass rounded-3xl p-6">
+      <div class="glass rounded-3xl p-6 tilt stagger-item">
         <div class="mx-auto w-full max-w-2xl">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold tracking-tight">Helpdesk‑AI Assistant</h2>
-            <div class="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/70">
-              beta
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
+              <span class="inline-block animate-bounce text-xl">🤖</span>
+              <span class="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Helpdesk‑AI Assistant</span>
+            </h2>
+            <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300 flex items-center gap-1.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 pulse"></span>
+              <span>online</span>
             </div>
           </div>
 
           <!-- Conversation area -->
-          <div id="conversation" class="mt-4 rounded-xl bubble p-3 text-sm text-slate-200 shadow-inner">
-            <div class="text-slate-400">Ask about any IT issue. I'll propose a fix or open a ticket.</div>
+          <div id="conversation" class="rounded-xl bubble p-4 text-sm text-slate-200 shadow-inner min-h-[140px] max-h-[450px] overflow-y-auto scroll-smooth">
+            <div class="text-slate-400 flex items-center gap-2 fade-in">
+              <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 pulse"></span>
+              <span>Ask about any IT issue. I'll propose a fix or open a ticket.</span>
+            </div>
           </div>
 
           <!-- Form -->
@@ -70,18 +77,20 @@
         </div>
       </div>
 
-      <!-- Remote PC Connection Feature -->
-      <div class="relative mt-8 glass rounded-3xl p-6 overflow-hidden">
+      <!--Remote PC Connection Feature -->
+      <div class="relative mt-8 glass rounded-3xl p-6 overflow-hidden tilt stagger-item">
         <div class="mx-auto w-full max-w-4xl">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
-              <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/30 flex items-center justify-center">
-                <svg class="w-4 h-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
+              <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/30 flex items-center justify-center glow-emerald">
+                <svg class="w-4 h-4 text-emerald-900 spin" fill="currentColor" viewBox="0 0 20 20" style="animation-duration: 8s">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
                 </svg>
               </div>
               <div>
-                <h2 class="text-lg font-semibold tracking-tight">Remote PC Access</h2>
+                <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
+                  <span>Remote PC Access</span>
+                </h2>
                 <p class="text-xs text-slate-400">AI fixes your PC remotely via secure connection</p>
               </div>
             </div>
@@ -163,14 +172,19 @@
       </div>
 
       <!-- Previous Queries -->
-      <div class="relative mt-8 glass rounded-3xl p-6">
+      <div class="relative mt-8 glass rounded-3xl p-6 tilt stagger-item">
         <div class="mx-auto w-full max-w-5xl">
           <div class="mb-3 flex items-center justify-between">
-            <h2 class="text-lg font-semibold tracking-tight">Your previous queries</h2>
-            <button id="refreshHistoryBtn" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10">Refresh</button>
+            <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
+              <span class="inline-block text-lg">📜</span>
+              <span>Your previous queries</span>
+            </h2>
+            <button id="refreshHistoryBtn" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:scale-105">
+              <span>🔄</span> Refresh
+            </button>
           </div>
           <div id="historyList" class="grid gap-3 md:grid-cols-2">
-            <div class="text-slate-400">No history yet.</div>
+            <div class="text-slate-400 fade-in">No history yet.</div>
           </div>
         </div>
       </div>
@@ -415,16 +429,25 @@
           if (!res.ok) throw new Error('Failed to fetch history');
           const items = await res.json();
           if (!items.length) {
-            historyList.innerHTML = '<div class="text-slate-400">No history yet.</div>';
+            historyList.innerHTML = '<div class="text-slate-400 fade-in">No history yet.</div>';
             return;
           }
           historyList.innerHTML = '';
-          items.forEach(item => {
+          items.forEach((item, index) => {
             const card = document.createElement('button');
-            card.className = 'group rounded-xl border border-white/10 bg-white/5 p-3 text-left transition hover:bg-white/10 tilt';
+            card.className = 'group rounded-xl border border-white/10 bg-white/5 p-3 text-left transition hover:bg-white/10 hover:scale-[1.02] hover:shadow-lg tilt stagger-item';
+            card.style.animationDelay = `${index * 80}ms`;
             card.innerHTML = `
-              <div class="line-clamp-2 text-sm text-slate-200">${fmt(item.question)}</div>
-              <div class="mt-2 text-[11px] text-slate-400">Updated: ${new Date(item.updated_at).toLocaleString()}</div>
+              <div class="flex items-start gap-2 mb-2">
+                <span class="inline-block text-sm">💬</span>
+                <div class="line-clamp-2 text-sm text-slate-200 font-medium">${fmt(item.question)}</div>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>${new Date(item.updated_at).toLocaleString()}</span>
+              </div>
             `;
             card.addEventListener('click', async () => {
               const res2 = await fetch(`/history/${item.conversation_id}`, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -449,22 +472,29 @@
                 assistantMsg = msgs.find(m => (m.role || '').toString().toLowerCase() === 'assistant') || null;
               }
               const html = `
-                <div>
-                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400">Question</div>
-                  <div class="rounded-lg border border-white/10 bg-black/30 p-3 text-slate-200">${fmt(userMsg ? userMsg.content : item.question)}</div>
+                <div class="pop-in">
+                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400 flex items-center gap-1">
+                    <span>👤</span> Question
+                  </div>
+                  <div class="rounded-lg border border-fuchsia-400/20 bg-fuchsia-400/5 p-3 text-slate-200">${fmt(userMsg ? userMsg.content : item.question)}</div>
                 </div>
-                <div>
-                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400">Solution</div>
-                  <div class="rounded-lg border border-white/10 bg-black/30 p-3 text-slate-200">${fmt(assistantMsg ? assistantMsg.content : (item.answer || 'No answer recorded.'))}</div>
+                <div class="pop-in delay-1">
+                  <div class="mb-2 text-xs uppercase tracking-wide text-slate-400 flex items-center gap-1">
+                    <span>🤖</span> AI Solution
+                  </div>
+                  <div class="rounded-lg border border-cyan-400/20 bg-cyan-400/5 p-3 text-slate-200">${fmt(assistantMsg ? assistantMsg.content : (item.answer || 'No answer recorded.'))}</div>
                 </div>
               `;
               openModal(html);
             });
             historyList.appendChild(card);
           });
+          
+          // Trigger stagger animation
+          staggerAnimation('.stagger-item', 'animate-in', 80);
         } catch (e) {
           console.error('Failed to load history', e);
-          historyList.innerHTML = '<div class="text-rose-300">Failed to load history.</div>';
+          historyList.innerHTML = '<div class="text-rose-300 fade-in">Failed to load history.</div>';
         }
       }
 
@@ -486,13 +516,32 @@
         
         if (!message) return;
         
-        // Show loading state
+        // Animate button loading state
         submitBtn.disabled = true;
-        btnText.textContent = 'Thinking…';
-        btnIcon.style.display = 'none';
+        submitBtn.classList.add('shimmer');
+        btnText.textContent = 'Analyzing…';
+        btnIcon.innerHTML = '<span class="spin inline-block">⚙️</span>';
         
-        // Clear previous result
-        conversation.innerHTML = '<div class="text-slate-400">Processing your request...</div>';
+        // Show user message with animation
+        const userBubble = document.createElement('div');
+        userBubble.className = 'bubble user p-4 rounded-xl mb-3 animate-in';
+        userBubble.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-sm">
+              👤
+            </div>
+            <div class="flex-1">
+              <div class="text-xs text-slate-400 mb-1">You</div>
+              <div class="text-sm text-slate-100">${message}</div>
+            </div>
+          </div>
+        `;
+        conversation.innerHTML = '';
+        conversation.appendChild(userBubble);
+        
+        // Show AI typing indicator
+        const typingBubble = showTypingIndicator('conversation');
+        conversation.scrollTop = conversation.scrollHeight;
         
         try {
           const response = await fetch('/webhook/assist-or-ticket', {
@@ -504,6 +553,12 @@
             body: JSON.stringify({ message })
           });
           
+          // Simulate thinking time for better UX
+          await new Promise(resolve => setTimeout(resolve, 1200));
+          
+          // Remove typing indicator
+          removeTypingIndicator();
+          
           if (response.ok) {
             const result = await response.json();
             
@@ -514,7 +569,7 @@
               let remoteOfferHtml = '';
               if (isRemoteFixable) {
                 remoteOfferHtml = `
-                  <div class="mt-3 p-3 rounded-lg border border-cyan-400/30 bg-cyan-400/5">
+                  <div class="mt-3 p-3 rounded-lg border border-cyan-400/30 bg-cyan-400/5 animate-in delay-1">
                     <div class="flex items-center gap-2 mb-2">
                       <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
@@ -529,18 +584,35 @@
                 `;
               }
               
-              conversation.innerHTML = `
-                <div class="space-y-2">
-                  <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
-                    <span>AI Solution</span>
-                    <span class="ml-1 inline-block rounded-full bg-emerald-400/20 px-1.5 py-0.5 text-[10px] text-emerald-200">
-                      ${Math.round(result.confidence * 100)}%
-                    </span>
+              // Create AI response bubble with animation
+              const aiBubble = document.createElement('div');
+              aiBubble.className = 'bubble ai p-4 rounded-xl mb-3 pop-in';
+              aiBubble.innerHTML = `
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-500 flex items-center justify-center text-sm shadow-lg shadow-cyan-400/30">
+                    🤖
                   </div>
-                  <p class="whitespace-pre-wrap leading-relaxed text-slate-200">${result.reply_text}</p>
-                  ${remoteOfferHtml}
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-xs text-slate-400">AI Assistant</span>
+                      <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-emerald-300">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 pulse"></span>
+                        Solution Found
+                      </span>
+                      <span class="rounded-full bg-emerald-400/20 px-1.5 py-0.5 text-[10px] text-emerald-200">
+                        ${Math.round(result.confidence * 100)}% confidence
+                      </span>
+                    </div>
+                    <div id="aiResponse" class="text-sm text-slate-100 whitespace-pre-wrap leading-relaxed"></div>
+                    ${remoteOfferHtml}
+                  </div>
                 </div>
               `;
+              conversation.appendChild(aiBubble);
+              
+              // Typewriter effect for AI response
+              const responseEl = document.getElementById('aiResponse');
+              await typewriterEffect(responseEl, result.reply_text, 15);
               
               // Add event listener for remote fix button if it exists
               const offerBtn = document.getElementById('offerRemoteFixBtn');
@@ -552,37 +624,60 @@
                 });
               }
             } else if (result.action === 'escalate') {
-              conversation.innerHTML = `
-                <div class="space-y-2">
-                  <div class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-cyan-300">
-                    Ticket Created
+              const ticketBubble = document.createElement('div');
+              ticketBubble.className = 'bubble ai p-4 rounded-xl mb-3 pop-in';
+              ticketBubble.innerHTML = `
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center text-sm shadow-lg shadow-amber-400/30">
+                    🎫
                   </div>
-                  <p>
-                    We've opened ticket <b>#${result.ticket_id}</b> (status: <b>${result.status}</b>). Our team will follow up.
-                  </p>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-xs text-slate-400">AI Assistant</span>
+                      <span class="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-cyan-300">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 pulse"></span>
+                        Ticket Created
+                      </span>
+                    </div>
+                    <p class="text-sm text-slate-100">
+                      I've escalated this to our expert team. Ticket <b class="text-amber-300">#${result.ticket_id}</b> has been created with status: <b class="text-cyan-300">${result.status}</b>. You'll receive updates shortly.
+                    </p>
+                  </div>
                 </div>
               `;
+              conversation.appendChild(ticketBubble);
             }
           } else {
             const error = await response.json();
-            conversation.innerHTML = `
-              <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200">
-                ⚠️ ${error.detail || 'Something went wrong'}
+            const errorBubble = document.createElement('div');
+            errorBubble.className = 'rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-rose-200 pop-in';
+            errorBubble.innerHTML = `
+              <div class="flex items-center gap-2">
+                <span class="text-lg">⚠️</span>
+                <span>${error.detail || 'Something went wrong'}</span>
               </div>
             `;
+            conversation.appendChild(errorBubble);
           }
         } catch (error) {
           console.error('Assistant request failed', error);
-          conversation.innerHTML = `
-            <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200">
-              ⚠️ Network error. Please try again.
+          removeTypingIndicator();
+          const errorBubble = document.createElement('div');
+          errorBubble.className = 'rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-rose-200 pop-in';
+          errorBubble.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="text-lg">⚠️</span>
+              <span>Network error. Please try again.</span>
             </div>
           `;
+          conversation.appendChild(errorBubble);
         } finally {
           submitBtn.disabled = false;
+          submitBtn.classList.remove('shimmer');
           btnText.textContent = 'Ask';
-          btnIcon.style.display = 'inline';
+          btnIcon.innerHTML = '→';
           messageInput.value = '';
+          conversation.scrollTop = conversation.scrollHeight;
           // Refresh history after sending
           loadHistory();
         }

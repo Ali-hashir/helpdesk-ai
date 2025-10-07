@@ -16,63 +16,65 @@
     </div>
 
     <div class="relative flex min-h-full items-center justify-center px-6 py-12">
-      <div class="w-full max-w-md">
-        <div class="glass rounded-3xl p-8">
+      <div class="w-full max-w-md stagger-item">
+        <div class="glass rounded-3xl p-8 tilt">
           <div class="mb-6 text-center">
-            <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt"></div>
-            <h2 class="text-2xl font-semibold tracking-tight">Join Helpdesk‑AI</h2>
-            <p class="mt-2 text-sm text-slate-400">Create your account to get started</p>
+            <div class="mx-auto mb-4 h-14 w-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/40 tilt glow-fuchsia pop-in flex items-center justify-center text-2xl">
+              ✨
+            </div>
+            <h2 class="text-2xl font-semibold tracking-tight bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent animate-in delay-1">Join Helpdesk‑AI</h2>
+            <p class="mt-2 text-sm text-slate-400 fade-in delay-2">Create your account and get AI-powered IT support</p>
           </div>
 
-          <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200"></div>
+          <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200 pop-in"></div>
 
-          <form id="signupForm" class="space-y-4">
+          <form id="signupForm" class="space-y-4 animate-in delay-3">
             <div>
-              <label for="username" class="block text-sm font-medium text-slate-300">Username</label>
+              <label for="username" class="block text-sm font-medium text-slate-300 mb-1">Username</label>
               <input
                 type="text"
                 id="username"
                 name="username"
                 required
-                class="mt-1 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
                 placeholder="Choose a username"
               />
             </div>
 
             <div>
-              <label for="email" class="block text-sm font-medium text-slate-300">Email</label>
+              <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Email</label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 required
-                class="mt-1 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
                 placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label for="password" class="block text-sm font-medium text-slate-300">Password</label>
+              <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Password</label>
               <input
                 type="password"
                 id="password"
                 name="password"
                 required
                 minlength="6"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
                 placeholder="Create a password (min 6 characters)"
               />
             </div>
 
-            <button type="submit" id="submitBtn" class="btn-funky w-full rounded-xl px-4 py-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition enabled:hover:scale-[1.02] disabled:opacity-50">
-              <span id="btnText">Create Account</span>
+            <button type="submit" id="submitBtn" class="btn-funky w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition enabled:hover:scale-[1.02] disabled:opacity-50 mt-6">
+              <span id="btnText">Create Account →</span>
             </button>
           </form>
 
-          <div class="mt-6 text-center">
+          <div class="mt-6 text-center fade-in delay-4">
             <p class="text-sm text-slate-400">
               Already have an account?
-              <a href="/login" class="font-medium text-fuchsia-400 hover:text-fuchsia-300">Sign in</a>
+              <a href="/login" class="font-medium text-fuchsia-400 hover:text-fuchsia-300 hover:underline">Sign in</a>
             </p>
           </div>
         </div>
