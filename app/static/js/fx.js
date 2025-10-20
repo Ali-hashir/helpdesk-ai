@@ -6,7 +6,7 @@
   canvas.style.pointerEvents = 'none';
   const ctx = canvas.getContext('2d');
   let particles = [];
-  const colors = ['#f472b6', '#22d3ee', '#a855f7'];
+  const colors = ['#38bdf8', '#1d4ed8', '#0ea5e9'];
   const mouse = { x: null, y: null, radius: 150 };
 
   function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -51,7 +51,7 @@
         
         if(dist < 120) {
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(244,114,182,${0.12 * (1 - dist / 120)})`;
+          ctx.strokeStyle = `rgba(56,189,248,${0.1 * (1 - dist / 120)})`;
           ctx.lineWidth = 0.6;
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
@@ -97,11 +97,11 @@
       const pulse = Math.sin(p.phase) * 0.15 + 1;
       
       // Draw particle with glow
-      ctx.beginPath();
-      ctx.fillStyle = p.c + Math.floor(p.a*255).toString(16).padStart(2,'0');
-      ctx.globalAlpha = p.a;
+  ctx.beginPath();
+  ctx.fillStyle = p.c + Math.floor(p.a*255).toString(16).padStart(2,'0');
+  ctx.globalAlpha = p.a;
       ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI*2);
-      ctx.shadowBlur = 12;
+  ctx.shadowBlur = 18;
       ctx.shadowColor = p.c;
       ctx.fill();
       ctx.shadowBlur = 0;

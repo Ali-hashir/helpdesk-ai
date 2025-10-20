@@ -1,24 +1,32 @@
 /* Funky animated theme with advanced animations */
 :root {
-  --bg1: #0b1220;
-  --bg2: #0a0f1a;
+  --bg1: #0f172a;
+  --bg2: #111827;
   --fg: #e5e7eb;
-  --accent1: #f472b6; /* fuchsia */
-  --accent2: #22d3ee; /* cyan */
-  --card: rgba(255,255,255,0.06);
-  --border: rgba(255,255,255,0.12);
-  --ring: rgba(244,114,182,0.25);
+  --accent1: #38bdf8; /* sky */
+  --accent2: #0ea5e9; /* cyan */
+  --card: rgba(15,23,42,0.6);
+  --border: rgba(148,163,184,0.18);
+  --ring: rgba(56,189,248,0.25);
 }
 
 html, body { height: 100%; }
-body { min-height: 100dvh; background: radial-gradient(1200px 800px at 10% -10%, rgba(244,114,182,0.25), transparent 60%), radial-gradient(1000px 700px at 90% 20%, rgba(34,211,238,0.22), transparent 55%), linear-gradient(180deg, var(--bg1), var(--bg2)); overflow-x: hidden; }
+body {
+  min-height: 100dvh;
+  background-color: var(--bg2);
+  background-image:
+    radial-gradient(1200px 900px at 50% -25%, rgba(56,189,248,0.14), transparent 65%),
+    linear-gradient(180deg, var(--bg1) 0%, var(--bg1) 35%, var(--bg2) 100%);
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+}
 
-/* Animated gradient orbs with enhanced motion */
-.bg-orbs { position: fixed; inset: -20% -10% -10% -10%; pointer-events: none; filter: blur(60px); opacity: 0.9; z-index: 0; }
-.bg-orbs .orb { position: absolute; border-radius: 50%; mix-blend-mode: screen; animation: float 22s ease-in-out infinite; }
-.bg-orbs .orb.f1 { background: radial-gradient(circle at 30% 30%, rgba(244,114,182,0.7), transparent 65%); width: 50vw; height: 50vw; left: -10vw; top: -10vw; animation: float1 26s ease-in-out infinite; }
-.bg-orbs .orb.f2 { background: radial-gradient(circle at 40% 40%, rgba(34,211,238,0.6), transparent 60%); width: 45vw; height: 45vw; right: -10vw; top: 5vh; animation: float2 24s ease-in-out infinite; }
-.bg-orbs .orb.f3 { background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.35), transparent 60%); width: 60vw; height: 60vw; left: 10vw; bottom: -20vh; animation: float3 28s ease-in-out infinite; }
+/* Subtle ambient shapes */
+.bg-orbs { position: fixed; inset: -30% -20% -30% -20%; pointer-events: none; filter: blur(110px); opacity: 0.35; z-index: 0; }
+.bg-orbs .orb { position: absolute; border-radius: 50%; animation: float 28s ease-in-out infinite; background: rgba(30,41,59,0.45); }
+.bg-orbs .orb.f1 { width: 60vw; height: 60vw; left: -15vw; top: -20vh; background: rgba(148,163,184,0.18); }
+.bg-orbs .orb.f2 { width: 52vw; height: 52vw; right: -18vw; top: -5vh; background: rgba(96,165,250,0.14); animation: float2 30s ease-in-out infinite; }
+.bg-orbs .orb.f3 { width: 70vw; height: 70vw; left: 5vw; bottom: -35vh; background: rgba(30,64,175,0.12); animation: float3 32s ease-in-out infinite; }
 
 @keyframes float1 { 0%, 100% { transform: translate3d(0,0,0) scale(1) rotate(0deg);} 33% { transform: translate3d(3vw, -2vh, 0) scale(1.05) rotate(5deg);} 66% { transform: translate3d(-2vw, 3vh, 0) scale(0.98) rotate(-3deg);} }
 @keyframes float2 { 0%, 100% { transform: translate3d(0,0,0) scale(1) rotate(0deg);} 33% { transform: translate3d(-2vw, 3vh, 0) scale(1.03) rotate(-4deg);} 66% { transform: translate3d(3vw, -1vh, 0) scale(1.02) rotate(6deg);} }
@@ -30,12 +38,12 @@ body { min-height: 100dvh; background: radial-gradient(1200px 800px at 10% -10%,
 @keyframes grainMove { to { transform: translate3d(-10%, -10%, 0); } }
 
 /* Glass card with enhanced glow */
-.glass { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 10px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.02) inset; position: relative; }
+.glass { border: 1px solid var(--border); background: linear-gradient(180deg, rgba(15,23,42,0.8), rgba(11,18,30,0.65)); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: 0 20px 60px rgba(15,23,42,0.45), 0 0 0 1px rgba(148,163,184,0.08) inset; position: relative; }
 .glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent 40%, transparent 60%, rgba(255,255,255,0.05)); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 .glass:hover::before { opacity: 1; }
 
 /* Enhanced button with shine and pulse */
-.btn-funky { position: relative; border: 1px solid var(--border); color: #0a0a0a; background: radial-gradient(120% 120% at 10% 0%, var(--accent1), var(--accent2)); overflow: hidden; transform: translateZ(0); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.btn-funky { position: relative; border: 1px solid rgba(148,163,184,0.25); color: #0b1120; background: linear-gradient(135deg, var(--accent1), var(--accent2)); overflow: hidden; transform: translateZ(0); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .btn-funky::after { content: ""; position: absolute; inset: -100% -50% auto -50%; height: 200%; background: radial-gradient(60% 40% at 50% 50%, rgba(255,255,255,0.5), transparent 60%); transform: translateY(120%); transition: transform 500ms ease; filter: blur(8px); }
 .btn-funky:hover::after { transform: translateY(0%); }
 .btn-funky:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 20px 40px rgba(244,114,182,0.4); }
@@ -90,9 +98,21 @@ body { min-height: 100dvh; background: radial-gradient(1200px 800px at 10% -10%,
 .progress-bar { height: 2px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); animation: progress 2s ease-out; }
 
 /* Glow effects */
-.glow-fuchsia { box-shadow: 0 0 20px rgba(244,114,182,0.3); }
-.glow-cyan { box-shadow: 0 0 20px rgba(34,211,238,0.3); }
-.glow-emerald { box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+.glow-fuchsia { box-shadow: 0 0 24px rgba(59,130,246,0.25); }
+.glow-cyan { box-shadow: 0 0 24px rgba(56,189,248,0.25); }
+.glow-emerald { box-shadow: 0 0 24px rgba(45,212,191,0.25); }
+
+/* Live timeline styling */
+@keyframes livePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.12); opacity: 0.7; } }
+.live-dot { animation: livePulse 2.2s ease-in-out infinite; }
+
+@keyframes liveBar { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+.live-progress { background: linear-gradient(120deg, rgba(14,165,233,0.2), rgba(59,130,246,0.4), rgba(14,165,233,0.2)); background-size: 200% 100%; animation: liveBar 2.8s linear infinite; transition: width 0.45s ease; }
+
+@keyframes breatheGlow { 0%, 100% { box-shadow: 0 20px 50px -30px rgba(56,189,248,0.45); } 50% { box-shadow: 0 28px 60px -25px rgba(14,165,233,0.55); } }
+.live-card { animation: breatheGlow 6s ease-in-out infinite; }
+
+.ticker-swap { transition: opacity 0.4s ease; }
 
 /* Bounce animation for attention */
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }

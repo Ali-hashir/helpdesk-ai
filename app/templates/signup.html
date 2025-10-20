@@ -15,69 +15,143 @@
       <div class="orb f3"></div>
     </div>
 
-    <div class="relative flex min-h-full items-center justify-center px-6 py-12">
-      <div class="w-full max-w-md stagger-item">
-        <div class="glass rounded-3xl p-8 tilt">
-          <div class="mb-6 text-center">
-            <div class="mx-auto mb-4 h-14 w-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/40 tilt glow-fuchsia pop-in flex items-center justify-center text-2xl">
-              ✨
+    <div class="relative">
+      <div class="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12 xl:px-12">
+        <nav class="relative z-10 mb-12 flex flex-wrap items-center justify-between gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-xl">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-xl shadow-lg shadow-fuchsia-500/40">✨</div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Helpdesk‑AI</p>
+              <p class="text-base font-semibold text-white">Create your autonomous desk</p>
             </div>
-            <h2 class="text-2xl font-semibold tracking-tight bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent animate-in delay-1">Join Helpdesk‑AI</h2>
-            <p class="mt-2 text-sm text-slate-400 fade-in delay-2">Create your account and get AI-powered IT support</p>
+          </div>
+          <div class="hidden flex-1 items-center justify-center gap-3 text-xs text-slate-400 md:flex">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-flex h-1.5 w-1.5 items-center justify-center rounded-full bg-cyan-400"></span>
+              <span>ISO-ready controls</span>
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-flex items-center gap-1 text-emerald-300">
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm4 3a1 1 0 112 0v4h1a1 1 0 110 2h-3a1 1 0 01-1-1V6z"/>
+                </svg>
+                Instant onboarding
+              </span>
+            </div>
+          </div>
+          <a href="/login" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:scale-[1.02]">Sign in</a>
+        </nav>
+
+        <main class="grid flex-1 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div class="space-y-8">
+            <div class="space-y-3">
+              <span class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs uppercase tracking-wide text-emerald-200">Launch in minutes</span>
+              <h1 class="text-4xl font-bold leading-tight text-white sm:text-5xl">Spin up an AI tier-0 desk that never sleeps.</h1>
+              <p class="max-w-xl text-base text-slate-300 sm:text-lg">Invite your team, centralize knowledge, and let Helpdesk‑AI remediate incidents as soon as they appear. Everything is logged, auditable, and ready for human takeover when needed.</p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white">12k+</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Commands automated</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white"><span class="text-emerald-300">0</span> touch</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Hands-off resolutions</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white">SOC2</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Controls baked-in</p>
+              </div>
+            </div>
+            <div class="glass relative overflow-hidden rounded-[32px] border border-white/10 bg-black/30 p-6 shadow-[0_35px_110px_-55px_rgba(244,114,182,0.65)]">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-slate-400">Starter playbook</p>
+                  <h2 class="text-lg font-semibold text-white">VPN auto-heal template</h2>
+                </div>
+                <span class="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[11px] text-cyan-200">Deploys in 45s</span>
+              </div>
+              <div class="mt-4 grid gap-3 text-sm text-slate-300">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-cyan-400"></span>
+                  Gather device telemetry &amp; sentiment
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+                  Remediate VPN adapter + flush DNS
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-amber-400"></span>
+                  Confirm uptime &amp; notify requester
+                </div>
+              </div>
+              <div class="mt-4 rounded-2xl border border-white/10 bg-black/60 p-4 font-mono text-[11px] text-cyan-200 space-y-1">
+                <div><span class="text-amber-400">C:\Users\User&gt;</span> netsh winsock reset</div>
+                <div class="text-slate-300">Successfully reset the Winsock Catalog</div>
+                <div><span class="text-amber-400">C:\Users\User&gt;</span> ipconfig /renew</div>
+                <div class="text-emerald-300">AI: Connectivity restored • latency 14ms</div>
+              </div>
+            </div>
           </div>
 
-          <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200 pop-in"></div>
-
-          <form id="signupForm" class="space-y-4 animate-in delay-3">
-            <div>
-              <label for="username" class="block text-sm font-medium text-slate-300 mb-1">Username</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                required
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
-                placeholder="Choose a username"
-              />
+          <div class="glass relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-[0_35px_110px_-55px_rgba(244,114,182,0.6)] tilt">
+            <div class="mb-6 text-center space-y-2">
+              <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-lg shadow-lg shadow-fuchsia-500/40">🚀</div>
+              <h2 class="text-2xl font-semibold tracking-tight text-white">Create your account</h2>
+              <p class="text-sm text-slate-400">Provision your AI concierge and invite teammates in seconds.</p>
             </div>
 
-            <div>
-              <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
-                placeholder="Enter your email"
-              />
+            <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200"></div>
+
+            <form id="signupForm" class="space-y-4">
+              <div>
+                <label for="username" class="mb-1 block text-sm font-medium text-slate-300">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  required
+                  class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
+                  placeholder="Choose a username"
+                />
+              </div>
+
+              <div>
+                <label for="email" class="mb-1 block text-sm font-medium text-slate-300">Work email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
+                  placeholder="you@company.com"
+                />
+              </div>
+
+              <div>
+                <label for="password" class="mb-1 block text-sm font-medium text-slate-300">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  minlength="6"
+                  class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
+                  placeholder="Create a password (min 6 characters)"
+                />
+              </div>
+
+              <button type="submit" id="submitBtn" class="btn-funky w-full rounded-2xl px-4 py-2.5 text-sm font-semibold shadow-[0_12px_35px_-12px_rgba(244,114,182,0.6)] transition enabled:hover:scale-[1.02] disabled:opacity-60">
+                <span id="btnText">Create Account →</span>
+              </button>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-slate-400">
+              <span>Already onboarded?</span>
+              <a href="/login" class="ml-1 font-medium text-fuchsia-300 hover:text-fuchsia-200">Sign in</a>
             </div>
-
-            <div>
-              <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                minlength="6"
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
-                placeholder="Create a password (min 6 characters)"
-              />
-            </div>
-
-            <button type="submit" id="submitBtn" class="btn-funky w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition enabled:hover:scale-[1.02] disabled:opacity-50 mt-6">
-              <span id="btnText">Create Account →</span>
-            </button>
-          </form>
-
-          <div class="mt-6 text-center fade-in delay-4">
-            <p class="text-sm text-slate-400">
-              Already have an account?
-              <a href="/login" class="font-medium text-fuchsia-400 hover:text-fuchsia-300 hover:underline">Sign in</a>
-            </p>
           </div>
-        </div>
+        </main>
       </div>
     </div>
 
@@ -91,7 +165,7 @@
         
         // Show loading state
         submitBtn.disabled = true;
-        btnText.textContent = 'Creating Account...';
+  btnText.textContent = 'Creating Account...';
         errorDiv.classList.add('hidden');
         
         const formData = new FormData(e.target);
@@ -128,7 +202,7 @@
           errorDiv.classList.remove('hidden');
         } finally {
           submitBtn.disabled = false;
-          btnText.textContent = 'Create Account';
+          btnText.textContent = 'Create Account →';
         }
       });
     </script>

@@ -15,56 +15,121 @@
       <div class="orb f3"></div>
     </div>
 
-    <div class="relative flex min-h-full items-center justify-center px-6 py-12">
-      <div class="w-full max-w-md stagger-item">
-        <div class="glass rounded-3xl p-8 tilt">
-          <div class="mb-6 text-center">
-            <div class="mx-auto mb-4 h-14 w-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/40 tilt glow-fuchsia pop-in flex items-center justify-center text-2xl">
-              🤖
+    <div class="relative">
+      <div class="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12 xl:px-12">
+        <nav class="relative z-10 mb-12 flex flex-wrap items-center justify-between gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-xl">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-xl shadow-lg shadow-fuchsia-500/40">⚡</div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Helpdesk‑AI</p>
+              <p class="text-base font-semibold text-white">Autonomous IT desk sign-in</p>
             </div>
-            <h2 class="text-2xl font-semibold tracking-tight bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent animate-in delay-1">Login to Helpdesk‑AI</h2>
-            <p class="mt-2 text-sm text-slate-400 fade-in delay-2">Sign in to access your AI assistant</p>
+          </div>
+          <div class="hidden flex-1 items-center justify-center gap-3 text-xs text-slate-400 md:flex">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+              <span>AI Status: Online</span>
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-flex items-center gap-1 text-emerald-300">
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M12 7H8v6h4a3 3 0 000-6z"/>
+                  <path fill-rule="evenodd" d="M5 3a3 3 0 00-3 3v8a3 3 0 003 3h6.5a5.5 5.5 0 100-11H11V6a3 3 0 00-3-3H5z" clip-rule="evenodd"/>
+                </svg>
+                92% self-resolve
+              </span>
+            </div>
+          </div>
+          <a href="/signup" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:scale-[1.02]">Create account</a>
+        </nav>
+
+        <main class="grid flex-1 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="space-y-8">
+            <div class="space-y-3">
+              <span class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-wide text-cyan-200">Autonomous helpdesk</span>
+              <h1 class="text-4xl font-bold leading-tight text-white sm:text-5xl">Sign in to orchestrate fixes before tickets escalate.</h1>
+              <p class="max-w-xl text-base text-slate-300 sm:text-lg">Reconnect with the live assistant that continuously resolves issues across your fleet, keeps humans in the loop, and records every command for audit-readiness.</p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white">3m 42s</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Avg. resolution</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white">97%</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Confidence score</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p class="text-xl font-semibold text-white">24/7</p>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Coverage</p>
+              </div>
+            </div>
+            <div class="glass relative overflow-hidden rounded-[32px] border border-white/10 bg-black/30 p-6 shadow-[0_35px_110px_-55px_rgba(56,189,248,0.65)]">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 pulse"></span>
+                  <span>Remote session preview</span>
+                </div>
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">Zero-trust tunnel</span>
+              </div>
+              <div class="mt-4 rounded-2xl border border-white/10 bg-black/60 p-4 font-mono text-[11px] text-emerald-200 space-y-1">
+                <div><span class="text-amber-400">C:\Users\User&gt;</span> systeminfo | findstr /B /C:"OS Name"</div>
+                <div class="text-slate-300">OS Name: Microsoft Windows 10 Pro</div>
+                <div class="text-slate-300">OS Version: 10.0.19045 N/A Build 19045</div>
+                <div class="pt-2 text-cyan-300">AI: System running optimally. No issues detected.</div>
+              </div>
+              <div class="mt-4 flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
+                <span class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-200">🪪 Hardware attested</span>
+                <span class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-cyan-200">⚡ Auto remediation</span>
+              </div>
+            </div>
           </div>
 
-          <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200 pop-in"></div>
-
-          <form id="loginForm" class="space-y-4 animate-in delay-3">
-            <div>
-              <label for="username" class="block text-sm font-medium text-slate-300 mb-1">Username</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                required
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
-                placeholder="Enter your username"
-              />
+          <div class="glass relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-[0_35px_110px_-55px_rgba(244,114,182,0.6)] tilt">
+            <div class="mb-6 text-center space-y-2">
+              <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-lg shadow-lg shadow-fuchsia-500/40">🤖</div>
+              <h2 class="text-2xl font-semibold tracking-tight text-white">Welcome back</h2>
+              <p class="text-sm text-slate-400">Use your credentials to resume autonomous support.</p>
             </div>
 
-            <div>
-              <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
-                placeholder="Enter your password"
-              />
+            <div id="error-message" class="mb-4 hidden rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200"></div>
+
+            <form id="loginForm" class="space-y-4">
+              <div>
+                <label for="username" class="mb-1 block text-sm font-medium text-slate-300">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  required
+                  class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
+                  placeholder="Enter your username"
+                />
+              </div>
+
+              <div>
+                <label for="password" class="mb-1 block text-sm font-medium text-slate-300">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  class="w-full rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-slate-400 focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 transition"
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <button type="submit" id="submitBtn" class="btn-funky w-full rounded-2xl px-4 py-2.5 text-sm font-semibold shadow-[0_12px_35px_-12px_rgba(244,114,182,0.6)] transition enabled:hover:scale-[1.02] disabled:opacity-60">
+                <span id="btnText">Sign In →</span>
+              </button>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-slate-400">
+              <span>New to Helpdesk‑AI?</span>
+              <a href="/signup" class="ml-1 font-medium text-fuchsia-300 hover:text-fuchsia-200">Create an account</a>
             </div>
-
-            <button type="submit" id="submitBtn" class="btn-funky w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.5)] transition enabled:hover:scale-[1.02] disabled:opacity-50 mt-6">
-              <span id="btnText">Sign In →</span>
-            </button>
-          </form>
-
-          <div class="mt-6 text-center fade-in delay-4">
-            <p class="text-sm text-slate-400">
-              Don't have an account?
-              <a href="/signup" class="font-medium text-fuchsia-400 hover:text-fuchsia-300 hover:underline">Sign up</a>
-            </p>
           </div>
-        </div>
+        </main>
       </div>
     </div>
 
@@ -78,7 +143,7 @@
         
         // Show loading state
         submitBtn.disabled = true;
-        btnText.textContent = 'Signing In...';
+  btnText.textContent = 'Signing In...';
         errorDiv.classList.add('hidden');
         
         const formData = new FormData(e.target);
@@ -118,7 +183,7 @@
           errorDiv.classList.remove('hidden');
         } finally {
           submitBtn.disabled = false;
-          btnText.textContent = 'Sign In';
+          btnText.textContent = 'Sign In →';
         }
       });
     </script>

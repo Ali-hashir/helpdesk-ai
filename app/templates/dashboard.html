@@ -16,287 +16,636 @@
       <div class="orb f3"></div>
     </div>
 
-    <div class="relative mx-auto max-w-5xl px-6 py-10">
-      <!-- Header -->
-      <header class="mb-8 flex items-center justify-between stagger-item">
-        <div class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 shadow-lg shadow-fuchsia-500/30 tilt glow-fuchsia"></div>
-          <div>
-            <div class="text-xl font-semibold tracking-tight">Welcome, {{ user.username }}!</div>
-            <div class="text-xs text-slate-400">Ask anything — I’ll fix it or open a ticket</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <a href="/admin/tickets" class="hidden rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:scale-105 hover:shadow-lg" id="adminLink">Admin</a>
-          <button onclick="logout()" class="btn-funky rounded-lg px-3 py-2 text-sm">Logout</button>
-        </div>
-      </header>
-
-      <!-- AI Assistant Widget -->
-      <div class="glass rounded-3xl p-6 tilt stagger-item">
-        <div class="mx-auto w-full max-w-2xl">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
-              <span class="inline-block animate-bounce text-xl">🤖</span>
-              <span class="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Helpdesk‑AI Assistant</span>
-            </h2>
-            <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300 flex items-center gap-1.5">
-              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 pulse"></span>
-              <span>online</span>
+    <div class="relative">
+      <div class="mx-auto max-w-7xl px-6 py-10 xl:px-12">
+        <nav class="relative z-10 mb-12 flex flex-wrap items-center justify-between gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-xl">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-cyan-400 text-xl shadow-lg shadow-fuchsia-500/40">⚡</div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Helpdesk‑AI</p>
+              <p class="text-base font-semibold text-white">Autonomous IT desk for {{ user.username }}</p>
             </div>
           </div>
-
-          <!-- Conversation area -->
-          <div id="conversation" class="rounded-xl bubble p-4 text-sm text-slate-200 shadow-inner min-h-[140px] max-h-[450px] overflow-y-auto scroll-smooth">
-            <div class="text-slate-400 flex items-center gap-2 fade-in">
-              <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 pulse"></span>
-              <span>Ask about any IT issue. I'll propose a fix or open a ticket.</span>
+          <div class="hidden flex-1 items-center justify-center gap-3 text-xs text-slate-400 md:flex">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+              <span>AI Status: Online</span>
             </div>
-          </div>
-
-          <!-- Form -->
-          <form id="assistantForm" class="mt-4 grid gap-3">
-            <textarea
-              id="messageInput"
-              class="min-h-28 w-full resize-y rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none backdrop-blur transition focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 tilt"
-              placeholder="Describe your issue…"
-              rows="4"
-              required
-            ></textarea>
-            <button
-              type="submit"
-              id="submitBtn"
-              class="btn-funky relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-2.5 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(244,114,182,0.6)] focus:outline-none enabled:hover:scale-[1.02] disabled:opacity-60"
-            >
-              <span id="btnText" class="relative z-10">Ask</span>
-              <span id="btnIcon" class="relative z-10 text-base">→</span>
-            </button>
-          </form>
-
-          <div class="mt-2 text-[11px] text-slate-400">We may open a ticket automatically if a human expert is needed.</div>
-        </div>
-      </div>
-
-      <!--Remote PC Connection Feature -->
-      <div class="relative mt-8 glass rounded-3xl p-6 overflow-hidden tilt stagger-item">
-        <div class="mx-auto w-full max-w-4xl">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-              <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/30 flex items-center justify-center glow-emerald">
-                <svg class="w-4 h-4 text-emerald-900 spin" fill="currentColor" viewBox="0 0 20 20" style="animation-duration: 8s">
-                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-flex items-center gap-1 text-emerald-300">
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M12 7H8v6h4a3 3 0 000-6z"/>
+                  <path fill-rule="evenodd" d="M5 3a3 3 0 00-3 3v8a3 3 0 003 3h6.5a5.5 5.5 0 100-11H11V6a3 3 0 00-3-3H5z" clip-rule="evenodd"/>
                 </svg>
+                92% self-resolve
+              </span>
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <span class="inline-flex items-center gap-1 text-cyan-300">
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10.758 2.077a1 1 0 00-1.516 0l-6 7a1 1 0 00.758 1.654H7v5a1 1 0 001 1h4a1 1 0 001-1v-5h2.999a1 1 0 00.758-1.654l-6-7z"/>
+                </svg>
+                Zero-trust secure
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="/admin/tickets" class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:scale-[1.02]" id="adminLink">Admin</a>
+            <button onclick="logout()" class="btn-funky rounded-full px-4 py-2 text-sm">Logout</button>
+          </div>
+        </nav>
+
+        <main class="space-y-20">
+          <section id="assistant" class="grid items-start gap-12 lg:grid-cols-[1.05fr_1fr]">
+            <div class="space-y-6">
+              <span class="inline-flex items-center gap-2 rounded-full border border-fuchsia-400/30 bg-fuchsia-400/10 px-3 py-1 text-xs uppercase tracking-wide text-fuchsia-200">New • Autonomous Tier</span>
+              <h1 class="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+                Resolve tickets before they’re opened.
+              </h1>
+              <p class="max-w-xl text-base text-slate-300 sm:text-lg">
+                Helpdesk‑AI listens, diagnoses, and executes remote fixes across your fleet. Escalations only occur when a human truly needs to step in.
+              </p>
+              <div class="flex flex-wrap items-center gap-3">
+                <button id="heroRemoteCTA" class="btn-funky rounded-full px-5 py-2.5 text-sm font-semibold shadow-[0_20px_45px_-15px_rgba(56,189,248,0.7)]">
+                  Launch Remote Fix
+                </button>
+                <a href="#workflow" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-slate-200 hover:bg-white/10">
+                  <span>See how it works</span>
+                  <span class="text-base">↘</span>
+                </a>
               </div>
-              <div>
-                <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
-                  <span>Remote PC Access</span>
+              <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-2xl font-semibold text-white">3m 42s</p>
+                  <p class="text-xs uppercase tracking-wide text-slate-400">Avg. self-heal</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-2xl font-semibold text-white">97%</p>
+                  <p class="text-xs uppercase tracking-wide text-slate-400">Resolution confidence</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-2xl font-semibold text-white">24/7</p>
+                  <p class="text-xs uppercase tracking-wide text-slate-400">Autonomous coverage</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-2xl font-semibold text-white">SOC2</p>
+                  <p class="text-xs uppercase tracking-wide text-slate-400">Ready controls</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass relative overflow-hidden rounded-[32px] p-8 shadow-[0_35px_120px_-50px_rgba(34,211,238,0.75)] tilt">
+              <div class="flex items-center justify-between">
+                <h2 class="flex items-center gap-2 text-lg font-semibold tracking-tight">
+                  <span class="inline-block animate-bounce text-xl">🤖</span>
+                  <span class="bg-gradient-to-r from-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">Helpdesk‑AI Assistant</span>
                 </h2>
-                <p class="text-xs text-slate-400">AI fixes your PC remotely via secure connection</p>
-              </div>
-            </div>
-            <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300">
-              powered by NinjaOne
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-6">
-            <!-- Connection Status -->
-            <div class="space-y-4">
-              <div class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-black/20">
-                <div class="flex-shrink-0">
-                  <div id="connectionStatus" class="h-3 w-3 rounded-full bg-red-400 shadow-lg shadow-red-400/50"></div>
-                </div>
-                <div class="flex-1">
-                  <div class="text-sm font-medium text-white">PC Connection</div>
-                  <div id="connectionText" class="text-xs text-slate-400">Not connected</div>
+                <div class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] uppercase tracking-wide text-emerald-300">
+                  <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+                  Online
                 </div>
               </div>
-
-              <button 
-                id="connectPcBtn" 
-                class="btn-funky w-full rounded-xl px-4 py-3 text-sm font-semibold shadow-[0_10px_30px_-10px_rgba(16,185,129,0.6)] transition enabled:hover:scale-[1.02]"
-              >
-                <span class="flex items-center justify-center gap-2">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                  </svg>
-                  <span id="connectBtnText">Connect My PC</span>
-                </span>
-              </button>
-
-              <button 
-                id="remoteSessionBtn" 
-                class="hidden w-full rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-400/20 hover:scale-[1.02] mt-2"
-              >
-                <span class="flex items-center justify-center gap-2">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-                  </svg>
-                  Open Remote Session
-                </span>
-              </button>
-
-              <div class="text-[11px] text-slate-400 leading-relaxed">
-                🔒 Secure RMM connection • 🤖 AI auto-diagnosis • ⚡ Instant fixes
+              <p class="mt-3 text-xs text-slate-400">Ask for any fix. The assistant will diagnose, execute commands, or escalate with full audit trails.</p>
+              <div id="conversation" class="mt-5 min-h-[180px] max-h-[420px] overflow-y-auto rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-slate-200 shadow-inner">
+                <div class="flex items-center gap-2 text-slate-400 fade-in">
+                  <span class="inline-block h-2 w-2 rounded-full bg-cyan-400 pulse"></span>
+                  <span>How can I help? Describe any device or service issue to begin.</span>
+                </div>
               </div>
+              <form id="assistantForm" class="mt-5 grid gap-3">
+                <textarea
+                  id="messageInput"
+                  class="min-h-28 w-full resize-y rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none backdrop-blur transition focus:border-fuchsia-400/40 focus:ring-2 focus:ring-fuchsia-400/20 tilt"
+                  placeholder="Describe your issue…"
+                  rows="4"
+                  required
+                ></textarea>
+                <button
+                  type="submit"
+                  id="submitBtn"
+                  class="btn-funky relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-[0_20px_45px_-18px_rgba(244,114,182,0.65)] focus:outline-none enabled:hover:scale-[1.02] disabled:opacity-60"
+                >
+                  <span id="btnText" class="relative z-10">Ask</span>
+                  <span id="btnIcon" class="relative z-10 text-base">→</span>
+                </button>
+              </form>
+              <p class="mt-2 text-[11px] text-slate-400">We may open a ticket automatically if a human expert is needed.</p>
             </div>
+          </section>
 
-            <!-- AI Capabilities Preview -->
-            <div class="space-y-3">
-              <div class="text-sm font-medium text-slate-300 mb-2">What AI can fix remotely:</div>
+          <section id="remote" class="space-y-8">
+            <div class="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
               <div class="space-y-2">
-                <div class="flex items-center gap-2 text-xs text-slate-400">
-                  <div class="h-1.5 w-1.5 rounded-full bg-cyan-400"></div>
-                  <span>Software installation & updates</span>
+                <span class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs uppercase tracking-wide text-emerald-200">Live Control</span>
+                <h2 class="text-3xl font-semibold text-white sm:text-4xl">Secure remote operations in one click</h2>
+                <p class="max-w-2xl text-sm text-slate-400 sm:text-base">Empower the AI to connect, diagnose, and resolve issues while maintaining full visibility and control.</p>
+              </div>
+              <button id="remoteLearnMore" class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200">
+                View audit trail example
+                <span class="text-base">↗</span>
+              </button>
+            </div>
+
+            <div class="glass relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-[0_45px_140px_-60px_rgba(16,185,129,0.75)]">
+              <div class="mb-8 flex flex-wrap items-start justify-between gap-6">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 text-lg shadow-lg shadow-emerald-500/30">
+                    🖥️
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-semibold text-white">Remote PC Access</h3>
+                    <p class="text-xs uppercase tracking-wide text-emerald-200">Powered by NinjaOne + Helpdesk‑AI playbooks</p>
+                  </div>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-slate-400">
-                  <div class="h-1.5 w-1.5 rounded-full bg-fuchsia-400"></div>
-                  <span>Registry & system optimization</span>
+                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-emerald-200">
+                  <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+                  Zero-trust tunnel active
                 </div>
-                <div class="flex items-center gap-2 text-xs text-slate-400">
-                  <div class="h-1.5 w-1.5 rounded-full bg-emerald-400"></div>
-                  <span>Network connectivity issues</span>
+              </div>
+
+              <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+                <div class="space-y-5">
+                  <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-4">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20">
+                      <div id="connectionStatus" class="h-3 w-3 rounded-full bg-red-400 shadow-lg shadow-red-400/50"></div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-white">PC Connection</p>
+                      <p id="connectionText" class="text-xs text-slate-400">Not connected</p>
+                    </div>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wide text-slate-300">Device trust: pending</span>
+                  </div>
+
+                  <button 
+                    id="connectPcBtn" 
+                    class="btn-funky w-full rounded-2xl px-5 py-3 text-sm font-semibold shadow-[0_24px_70px_-30px_rgba(16,185,129,0.75)] transition enabled:hover:scale-[1.02]"
+                  >
+                    <span class="flex items-center justify-center gap-2">
+                      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                      </svg>
+                      <span id="connectBtnText">Connect My PC</span>
+                    </span>
+                  </button>
+
+                  <button 
+                    id="remoteSessionBtn" 
+                    class="hidden w-full rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-5 py-3 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-400/20 hover:scale-[1.02]"
+                  >
+                    <span class="flex items-center justify-center gap-2">
+                      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                      </svg>
+                      Open Remote Session
+                    </span>
+                  </button>
+
+                  <div class="rounded-2xl border border-white/10 bg-black/30 p-4 text-[12px] text-slate-400">
+                    🔒 Secure RMM connection • 🤖 AI auto-diagnosis • ⚡ Instant fixes • 📜 Full audit log
+                  </div>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-slate-400">
-                  <div class="h-1.5 w-1.5 rounded-full bg-amber-400"></div>
-                  <span>Driver conflicts & hardware setup</span>
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-400">
-                  <div class="h-1.5 w-1.5 rounded-full bg-violet-400"></div>
-                  <span>Performance tuning & cleanup</span>
+
+                <div class="space-y-4">
+                  <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+                    <p class="text-sm font-medium text-white">What AI can fix remotely:</p>
+                    <div class="mt-4 grid gap-3 text-xs text-slate-300">
+                      <div class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-cyan-400"></span>Software installation & updates</div>
+                      <div class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-fuchsia-400"></span>Registry & system optimization</div>
+                      <div class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Network connectivity issues</div>
+                      <div class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"></span>Driver conflicts & hardware setup</div>
+                      <div class="flex items-center gap-2"><span class="inline-block h-1.5 w-1.5 rounded-full bg-violet-400"></span>Performance tuning & cleanup</div>
+                    </div>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-black/30 p-4">
+                    <p class="text-sm font-medium text-white">Live session indicators</p>
+                    <div class="mt-3 grid gap-2 text-xs text-slate-400">
+                      <div class="flex items-center justify-between"><span>Zero standing credentials</span><span class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-200">Ephemeral</span></div>
+                      <div class="flex items-center justify-between"><span>Command approvals</span><span class="rounded-full bg-cyan-500/20 px-2 py-0.5 text-cyan-200">Policy driven</span></div>
+                      <div class="flex items-center justify-between"><span>Session timeline</span><span class="rounded-full bg-fuchsia-500/20 px-2 py-0.5 text-fuchsia-200">Downloadable</span></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
+
+          <section id="history" class="space-y-8 pb-12">
+            <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div class="space-y-2">
+                <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-slate-300">Knowledge Hub</span>
+                <h2 class="text-3xl font-semibold text-white sm:text-4xl">Replay every solution without digging through chats</h2>
+                <p class="text-sm text-slate-400 sm:text-base">Review previous fixes, surface AI recommendations, or reopen sessions directly from the history grid.</p>
+              </div>
+              <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                <span class="text-emerald-300">Live sync</span>
+                <span class="h-1 w-1 rounded-full bg-slate-600"></span>
+                <span class="text-slate-400">Shared across devices</span>
+              </div>
+            </div>
+
+            <div class="glass rounded-[32px] p-8">
+              <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-fuchsia-500 text-lg shadow-lg shadow-fuchsia-500/30">📜</div>
+                  <div>
+                    <h3 class="text-xl font-semibold text-white">Your previous queries</h3>
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Instantly replay and escalate any past conversation</p>
+                  </div>
+                </div>
+                <button id="refreshHistoryBtn" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs text-slate-200 transition hover:bg-white/10 hover:scale-[1.02]">
+                  <span class="text-base">🔄</span>
+                  Refresh
+                </button>
+              </div>
+              <div id="historyList" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <div class="text-slate-400 fade-in">No history yet.</div>
+              </div>
+            </div>
+
+            <div class="glass flex flex-col gap-4 rounded-[32px] p-8 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="text-xs uppercase tracking-wide text-slate-400">Need a human perspective?</p>
+                <p class="text-lg font-semibold text-white">Route live sessions to your tier-2 queue with one click.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="openHistoryModalCta" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs text-slate-200 hover:bg-white/10">
+                  View sample transcript
+                  <span class="text-base">↗</span>
+                </button>
+                <a href="#assistant" class="btn-funky rounded-full px-4 py-2 text-xs font-semibold">Open assistant</a>
+              </div>
+            </div>
+          </section>
+
+          <section id="workflow" class="space-y-8">
+            <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div class="max-w-2xl space-y-2">
+                <span class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-wide text-cyan-200">Resolution Flow</span>
+                <h2 class="text-3xl font-semibold text-white sm:text-4xl">From intake to remediation in three orchestrated steps</h2>
+                <p class="text-sm text-slate-400 sm:text-base">Each stage is transparent, auditable, and optimized to keep humans out of repetitive work.</p>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">SOC2 alignment</span>
+                <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">GDPR ready</span>
+              </div>
+            </div>
+            <div class="grid gap-5 md:grid-cols-3">
+              <div class="glass h-full rounded-[28px] p-6">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wide text-slate-300">Step 01 • Listen</div>
+                <h3 class="text-xl font-semibold text-white">Contextual intake</h3>
+                <p class="mt-2 text-sm text-slate-300">Auto-classify issues, gather device telemetry, and set resolution targets instantly.</p>
+                <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-fuchsia-400"></span>Natural language understanding</li>
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span>Device fingerprint enrichment</li>
+                </ul>
+              </div>
+              <div class="glass h-full rounded-[28px] p-6">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wide text-slate-300">Step 02 • Automate</div>
+                <h3 class="text-xl font-semibold text-white">Autonomous execution</h3>
+                <p class="mt-2 text-sm text-slate-300">Secure RMM sessions run scripted fixes, leveraging best-practice playbooks per issue.</p>
+                <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Command audit log</li>
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>Realtime compliance checks</li>
+                </ul>
+              </div>
+              <div class="glass h-full rounded-[28px] p-6">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wide text-slate-300">Step 03 • Escalate</div>
+                <h3 class="text-xl font-semibold text-white">Human handoff only when essential</h3>
+                <p class="mt-2 text-sm text-slate-300">Unresolved cases are packaged with evidence, logs, and AI-generated summaries for tier-2.</p>
+                <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-violet-400"></span>Auto ticket creation</li>
+                  <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-slate-200"></span>Knowledge base updates</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section id="live-experience" class="space-y-8">
+            <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div class="space-y-2">
+                <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-slate-300">Live Experience</span>
+                <h2 class="text-3xl font-semibold text-white sm:text-4xl">See the AI resolving work in real time</h2>
+                <p class="max-w-3xl text-sm text-slate-400 sm:text-base">Inspired by Lottielab, Flowstep, and AICM, this canvas shows live collaboration, active playbooks, and customer-impact updates.</p>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="inline-flex items-center gap-1 rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-sky-200">
+                  <span class="inline-block h-1.5 w-1.5 rounded-full bg-sky-400 live-dot"></span>
+                  Streaming data
+                </span>
+                <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">Updated every 10s</span>
+              </div>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+              <div class="glass live-card relative overflow-hidden rounded-[34px] p-8">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Live canvas</p>
+                    <h3 class="text-xl font-semibold text-white">Ticket triage board</h3>
+                  </div>
+                  <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-300">
+                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-sky-500/20 text-sky-200">AT</span>
+                    <span>3 active engineers</span>
+                  </div>
+                </div>
+                <div class="mt-6 grid gap-4 md:grid-cols-3">
+                  <div class="rounded-3xl border border-white/10 bg-white/10 p-4">
+                    <p class="mb-3 text-xs uppercase tracking-wide text-slate-400">Brand logo</p>
+                    <div class="flex h-44 items-center justify-center rounded-2xl border border-sky-400/40 bg-white/5 text-sky-200">SVG</div>
+                    <div class="mt-4 flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Queued</span>
+                      <span class="rounded-full bg-sky-500/10 px-2 py-0.5 text-sky-300">Ready</span>
+                    </div>
+                  </div>
+                  <div class="rounded-3xl border border-white/10 bg-white/10 p-4">
+                    <p class="mb-3 text-xs uppercase tracking-wide text-slate-400">Onboarding animation</p>
+                    <div class="relative flex aspect-[4/5] items-center justify-center rounded-2xl bg-white/10">
+                      <div class="absolute right-4 top-4 inline-flex h-7 w-7 items-center justify-center rounded-full bg-indigo-500/20 text-xs text-indigo-200">AT</div>
+                      <div class="flex h-36 w-28 flex-col justify-end rounded-3xl bg-gradient-to-b from-sky-200/80 to-sky-500/60 text-slate-900 shadow-lg shadow-sky-500/20">
+                        <div class="rounded-b-3xl bg-slate-900/90 p-2 text-[10px] text-slate-200">tap to pay</div>
+                      </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Animating</span>
+                      <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-300">In sync</span>
+                    </div>
+                  </div>
+                  <div class="rounded-3xl border border-white/10 bg-white/10 p-4 space-y-3">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Ad creatives</p>
+                    <div class="flex aspect-[4/5] items-center justify-center rounded-2xl bg-white/10">
+                      <div class="h-16 w-16 rounded-full bg-rose-400/20 flex items-center justify-center text-2xl">❤</div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Version 1</span>
+                      <span class="rounded-full bg-rose-500/10 px-2 py-0.5 text-rose-200">A/B Test</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Version 2</span>
+                      <span class="rounded-full bg-white/10 px-2 py-0.5 text-slate-300">Building</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-6 rounded-3xl border border-white/10 bg-black/20 p-5">
+                  <div class="flex items-center justify-between text-xs text-slate-400">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                      <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 live-dot"></span>
+                      <span>Playback timeline</span>
+                    </div>
+                    <span id="experienceTimestamp" class="text-slate-300">00:42 elapsed</span>
+                  </div>
+                  <div class="mt-4 h-2 rounded-full bg-white/5">
+                    <div id="experienceProgress" class="live-progress h-2 rounded-full" style="width: 35%"></div>
+                  </div>
+                  <div class="mt-3 grid gap-2 text-[11px] text-slate-400 md:grid-cols-3">
+                    <div>Fade in</div>
+                    <div>Animate path</div>
+                    <div>Slide out</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-6">
+                <div class="glass rounded-[30px] p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-xs uppercase tracking-wide text-slate-400">Live playbook</p>
+                      <h3 class="text-lg font-semibold text-white">Autonomous session tracker</h3>
+                    </div>
+                    <span class="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-[11px] text-sky-200">Tap a step</span>
+                  </div>
+                  <div class="mt-4 space-y-3">
+                    <button type="button" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-slate-200 transition hover:bg-white/10 hover:-translate-y-[2px]" data-experience-step data-title="Collect diagnostics" data-description="Helpdesk‑AI captures device fingerprint, recent tickets, and user sentiment before committing to any action." data-progress="22" data-elapsed="00:18">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                          <span class="inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-sky-400 live-dot"></span>
+                          <span>Collect diagnostics</span>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Step 01</span>
+                      </div>
+                    </button>
+                    <button type="button" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-slate-200 transition hover:bg-white/10 hover:-translate-y-[2px]" data-experience-step data-title="Execute remediation" data-description="Command bundle deployed: restart VPN adapter, flush DNS, re-apply always-on policy, confirm heartbeat." data-progress="58" data-elapsed="00:42">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                          <span class="inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-emerald-400 live-dot"></span>
+                          <span>Execute remediation</span>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Step 02</span>
+                      </div>
+                    </button>
+                    <button type="button" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-slate-200 transition hover:bg-white/10 hover:-translate-y-[2px]" data-experience-step data-title="Validate experience" data-description="Synthetic monitoring checks login, performs sample transaction, and pings user for qualitative feedback." data-progress="84" data-elapsed="01:07">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                          <span class="inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-violet-400 live-dot"></span>
+                          <span>Validate experience</span>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Step 03</span>
+                      </div>
+                    </button>
+                    <button type="button" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-slate-200 transition hover:bg-white/10 hover:-translate-y-[2px]" data-experience-step data-title="Share wrap-up" data-description="Session summary published to Slack, KB article auto-updated, customer notified with resolution video." data-progress="100" data-elapsed="01:32">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                          <span class="inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-amber-400 live-dot"></span>
+                          <span>Share wrap-up</span>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Step 04</span>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="mt-5 rounded-2xl border border-white/10 bg-black/25 p-4">
+                    <div class="flex items-center justify-between text-xs text-slate-400">
+                      <span id="experienceTitle" class="text-slate-200">Collect diagnostics</span>
+                      <span id="experienceElapsed">00:18</span>
+                    </div>
+                    <p id="experienceDescription" class="mt-3 text-sm text-slate-300">Helpdesk‑AI captures device fingerprint, recent tickets, and user sentiment before committing to any action.</p>
+                  </div>
+                </div>
+
+                <div class="glass rounded-[30px] p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-xs uppercase tracking-wide text-slate-400">Status ticker</p>
+                      <h3 class="text-lg font-semibold text-white">What just happened?</h3>
+                    </div>
+                    <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-300">
+                      <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 live-dot"></span>
+                      <span>Real-time</span>
+                    </div>
+                  </div>
+                  <div class="mt-4 space-y-3">
+                    <div class="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div class="flex items-center justify-between text-xs text-slate-400">
+                        <span id="tickerLabel" class="text-slate-300 ticker-swap">Session #4821</span>
+                        <span id="tickerTime" class="ticker-swap">12s ago</span>
+                      </div>
+                      <p id="tickerMessage" class="mt-3 text-sm text-slate-200 ticker-swap">AI re-established VPN tunnels for remote workforce in Singapore.</p>
+                    </div>
+                    <div class="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-xs text-sky-100">
+                      <div class="flex items-center gap-2">
+                        <span class="rounded-full bg-white/20 px-3 py-1 text-[10px] uppercase tracking-wide text-white/80">Changelog</span>
+                        <span>Next refresh in <span id="tickerCountdown">10</span>s</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="trust" class="space-y-8">
+            <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div class="space-y-2">
+                <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-slate-300">Trust Layer</span>
+                <h2 class="text-3xl font-semibold text-white sm:text-4xl">Compliance-first automation your auditors will love</h2>
+                <p class="max-w-3xl text-sm text-slate-400 sm:text-base">We mirror the enterprise polish of Relume and Lottielab with high-signal cards that highlight security, observability, and team collaboration.</p>
+              </div>
+              <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-xs uppercase tracking-wide text-emerald-200">
+                <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+                Monitored 24/7
+              </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              <div class="glass rounded-[28px] p-6 shadow-[0_25px_80px_-50px_rgba(244,114,182,0.6)]">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-fuchsia-400/30 bg-fuchsia-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-fuchsia-200">Security</div>
+                <h3 class="text-lg font-semibold text-white">Zero Trust by design</h3>
+                <p class="mt-2 text-sm text-slate-300">Every session spins up ephemeral credentials, hardware attestation, and encrypted command channels.</p>
+              </div>
+              <div class="glass rounded-[28px] p-6 shadow-[0_25px_80px_-50px_rgba(34,211,238,0.6)]">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-cyan-200">Observability</div>
+                <h3 class="text-lg font-semibold text-white">Real-time command feed</h3>
+                <p class="mt-2 text-sm text-slate-300">Watch AI actions live, download transcripts, and stream telemetry to your SIEM via webhook.</p>
+              </div>
+              <div class="glass rounded-[28px] p-6 shadow-[0_25px_80px_-50px_rgba(56,189,248,0.6)]">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-emerald-200">Collaboration</div>
+                <h3 class="text-lg font-semibold text-white">Human in the loop, instantly</h3>
+                <p class="mt-2 text-sm text-slate-300">Ping experts directly from the session view, share annotated remediation steps, and reopen past fixes.</p>
+              </div>
+              <div class="glass rounded-[28px] p-6 shadow-[0_25px_80px_-50px_rgba(168,85,247,0.55)]">
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-violet-200">Insights</div>
+                <h3 class="text-lg font-semibold text-white">An evolving playbook</h3>
+                <p class="mt-2 text-sm text-slate-300">Every resolved issue updates the knowledge graph, enriching automation coverage for the next ticket.</p>
+              </div>
+            </div>
+          </section>
+
+        </main>
+      </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-6">
+      <div class="max-h-[85vh] w-full max-w-3xl overflow-hidden rounded-[32px] glass p-8 shadow-[0_45px_120px_-50px_rgba(56,189,248,0.65)] tilt">
+        <div class="mb-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-fuchsia-500 text-lg shadow-lg shadow-cyan-500/30">🗂️</div>
+            <h3 class="text-lg font-semibold text-white">Query details</h3>
           </div>
+          <button id="modalCloseBtn" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10">
+            Close
+            <span class="text-base">×</span>
+          </button>
+        </div>
+        <div id="modalBody" class="space-y-4 overflow-y-auto text-sm">
+          <!-- Filled dynamically -->
         </div>
       </div>
+    </div>
 
-      <!-- Previous Queries -->
-      <div class="relative mt-8 glass rounded-3xl p-6 tilt stagger-item">
-        <div class="mx-auto w-full max-w-5xl">
-          <div class="mb-3 flex items-center justify-between">
-            <h2 class="text-lg font-semibold tracking-tight flex items-center gap-2">
-              <span class="inline-block text-lg">📜</span>
-              <span>Your previous queries</span>
-            </h2>
-            <button id="refreshHistoryBtn" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:scale-105">
-              <span>🔄</span> Refresh
+    <!-- Remote Session Modal -->
+    <div id="remoteSessionModal" class="fixed inset-0 z-50 hidden flex items-center justify-center overflow-y-auto bg-black/80 p-6">
+      <div class="flex w-full max-w-6xl flex-col rounded-[36px] glass p-8 shadow-[0_55px_160px_-70px_rgba(34,211,238,0.75)] max-h-[90vh]">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 text-sm shadow-lg shadow-emerald-500/30">
+              🔐
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-white">Remote Session — DESKTOP-AI-DEMO</h3>
+              <p class="text-xs uppercase tracking-wide text-emerald-200">Connected via NinjaOne RMM</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] uppercase tracking-wide text-emerald-200">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse"></span>
+              Session active
+            </div>
+            <button id="remoteSessionClose" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10">
+              End session
+              <span class="text-base">×</span>
             </button>
           </div>
-          <div id="historyList" class="grid gap-3 md:grid-cols-2">
-            <div class="text-slate-400 fade-in">No history yet.</div>
-          </div>
         </div>
-      </div>
 
-      <!-- History Modal -->
-      <div id="historyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
-        <div class="max-h-[85vh] w-full max-w-2xl overflow-auto rounded-2xl glass p-5 shadow-xl">
-          <div class="mb-3 flex items-center justify-between">
-            <h3 class="text-base font-semibold">Query details</h3>
-            <button id="modalCloseBtn" class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 hover:bg-white/10">Close</button>
-          </div>
-          <div id="modalBody" class="space-y-4 text-sm">
-            <!-- Filled dynamically -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Remote Session Modal -->
-      <div id="remoteSessionModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4">
-        <div class="h-[90vh] w-full max-w-6xl rounded-2xl glass p-5 shadow-xl flex flex-col">
-          <div class="mb-3 flex items-center justify-between flex-shrink-0">
-            <div class="flex items-center gap-3">
-              <div class="h-6 w-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
-                <svg class="w-3 h-3 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-base font-semibold">Remote Session - DESKTOP-AI-DEMO</h3>
-                <div class="text-xs text-emerald-400">Connected via NinjaOne RMM</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <div class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-1 text-[10px] text-emerald-300">
-                Session Active
-              </div>
-              <button id="remoteSessionClose" class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 hover:bg-white/10">End Session</button>
-            </div>
-          </div>
-          
-          <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="flex-1 overflow-y-auto pr-1">
+          <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
             <!-- Terminal/Command Panel -->
-            <div class="lg:col-span-2 rounded-xl border border-white/10 bg-black/40 p-4 flex flex-col">
-              <div class="flex items-center justify-between mb-3 text-xs text-slate-400">
+            <div class="flex h-full flex-col rounded-[28px] border border-white/10 bg-black/40 p-5 lg:col-span-2">
+              <div class="mb-4 flex items-center justify-between text-xs text-slate-400">
                 <div class="flex items-center gap-2">
                   <div class="flex gap-1">
-                    <div class="w-2 h-2 rounded-full bg-red-400"></div>
-                    <div class="w-2 h-2 rounded-full bg-amber-400"></div>
-                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div class="h-2 w-2 rounded-full bg-red-400"></div>
+                    <div class="h-2 w-2 rounded-full bg-amber-400"></div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-400"></div>
                   </div>
                   <span>AI Terminal Session</span>
                 </div>
-                <div id="sessionContext" class="text-cyan-400 hidden">Fixing: <span id="currentIssue">--</span></div>
+                <div id="sessionContext" class="hidden rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[10px] uppercase tracking-wide text-cyan-200">Fixing: <span id="currentIssue">--</span></div>
               </div>
-              <div id="terminalOutput" class="flex-1 font-mono text-xs text-green-300 overflow-y-auto min-h-64 bg-black/30 rounded p-3">
+              <div id="terminalOutput" class="min-h-64 flex-1 overflow-y-auto rounded-2xl bg-black/30 p-4 font-mono text-xs text-green-300">
                 <div class="text-cyan-400">Microsoft Windows [Version 10.0.19045.3570]</div>
                 <div class="text-cyan-400">(c) Microsoft Corporation. All rights reserved.</div>
                 <div class="mt-2"></div>
-                <div><span class="text-amber-400">C:\Users\User&gt;</span> <span class="text-white">systeminfo | findstr /B /C:"OS Name" /C:"OS Version"</span></div>
+                <div><span class="text-amber-400">C:\Users\User&gt;</span> <span class="text-white">systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot;</span></div>
                 <div class="text-slate-300">OS Name: Microsoft Windows 10 Pro</div>
                 <div class="text-slate-300">OS Version: 10.0.19045 N/A Build 19045</div>
                 <div class="mt-1"><span class="text-amber-400">C:\Users\User&gt;</span> <span id="currentCommand" class="text-white animate-pulse">_</span></div>
               </div>
             </div>
-            
+
             <!-- System Info Panel -->
             <div class="space-y-4">
-              <!-- System Status -->
-              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
-                <div class="text-sm font-medium text-white mb-2">System Status</div>
+              <div class="rounded-[24px] border border-white/10 bg-white/5 p-4">
+                <p class="mb-2 text-sm font-medium text-white">System Status</p>
                 <div class="space-y-2 text-xs">
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">CPU Usage:</span>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-400">CPU Usage</span>
                     <span class="text-emerald-400" id="cpuUsage">23%</span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">Memory:</span>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-400">Memory</span>
                     <span class="text-cyan-400" id="memUsage">8.2/16 GB</span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">Disk C::</span>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-400">Disk C:</span>
                     <span class="text-amber-400" id="diskUsage">245/500 GB</span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">Network:</span>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-400">Network</span>
                     <span class="text-emerald-400">Connected</span>
                   </div>
                 </div>
               </div>
-              
-              <!-- AI Actions -->
-              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
-                <div class="text-sm font-medium text-white mb-2">AI Actions</div>
+
+              <div class="rounded-[24px] border border-white/10 bg-white/5 p-4">
+                <p class="mb-2 text-sm font-medium text-white">AI Actions</p>
                 <div class="space-y-1.5 text-xs">
-                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-fuchsia-400/20 bg-fuchsia-400/10 text-fuchsia-200 hover:bg-fuchsia-400/20 transition" data-action="scan">
+                  <button class="ai-action-btn w-full rounded-xl border border-fuchsia-400/20 bg-fuchsia-400/10 px-3 py-2 text-left text-fuchsia-200 transition hover:bg-fuchsia-400/20" data-action="scan">
                     🔍 Run System Scan
                   </button>
-                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-cyan-400/20 bg-cyan-400/10 text-cyan-200 hover:bg-cyan-400/20 transition" data-action="optimize">
+                  <button class="ai-action-btn w-full rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-left text-cyan-200 transition hover:bg-cyan-400/20" data-action="optimize">
                     ⚡ Optimize Performance
                   </button>
-                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-emerald-400/20 bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20 transition" data-action="update">
+                  <button class="ai-action-btn w-full rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-left text-emerald-200 transition hover:bg-emerald-400/20" data-action="update">
                     📦 Update Software
                   </button>
-                  <button class="ai-action-btn w-full text-left px-2 py-1.5 rounded border border-amber-400/20 bg-amber-400/10 text-amber-200 hover:bg-amber-400/20 transition" data-action="cleanup">
+                  <button class="ai-action-btn w-full rounded-xl border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-left text-amber-200 transition hover:bg-amber-400/20" data-action="cleanup">
                     🧹 Disk Cleanup
                   </button>
                 </div>
               </div>
-              
-              <!-- Session Info -->
-              <div class="rounded-xl border border-white/10 bg-white/5 p-3">
-                <div class="text-sm font-medium text-white mb-2">Session Info</div>
+
+              <div class="rounded-[24px] border border-white/10 bg-white/5 p-4">
+                <p class="mb-2 text-sm font-medium text-white">Session Info</p>
                 <div class="space-y-1 text-xs text-slate-400">
                   <div>Started: <span id="sessionStart" class="text-white">--:--</span></div>
                   <div>Commands: <span id="commandCount" class="text-white">2</span></div>
@@ -308,6 +657,58 @@
         </div>
       </div>
     </div>
+
+    <footer class="relative mt-24 border-t border-white/10 py-12">
+      <div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-slate-900/50 to-[#0a1529]"></div>
+      <div class="mx-auto max-w-7xl px-6 xl:px-12">
+        <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide text-slate-400">Helpdesk‑AI</div>
+            <p class="text-sm text-slate-300">AI-powered service desk that blends the conversion focus of Relume, the polish of Lottielab, and the trust cues of AICM.</p>
+            <div class="flex items-center gap-3 text-xs text-slate-500">
+              <span>Powered by NinjaOne</span>
+              <span class="h-1 w-1 rounded-full bg-slate-600"></span>
+              <span>Version 2.4.0</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <p class="text-sm font-semibold text-white">Platform</p>
+            <ul class="space-y-2 text-sm text-slate-400">
+              <li><a class="hover:text-slate-200" href="#assistant">AI Assistant</a></li>
+              <li><a class="hover:text-slate-200" href="#remote">Remote Ops</a></li>
+              <li><a class="hover:text-slate-200" href="#history">Knowledge Hub</a></li>
+              <li><a class="hover:text-slate-200" href="/admin/tickets">Admin Console</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3">
+            <p class="text-sm font-semibold text-white">Resources</p>
+            <ul class="space-y-2 text-sm text-slate-400">
+              <li><a class="hover:text-slate-200" href="/docs">Docs &amp; API</a></li>
+              <li><a class="hover:text-slate-200" href="/playbooks">Automation Playbooks</a></li>
+              <li><a class="hover:text-slate-200" href="/status">Status Page</a></li>
+              <li><a class="hover:text-slate-200" href="mailto:support@helpdesk.ai">Contact</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3">
+            <p class="text-sm font-semibold text-white">Stay in the loop</p>
+            <p class="text-sm text-slate-400">Join our weekly digest with fresh automations and change logs.</p>
+            <form class="group flex flex-col gap-2 sm:flex-row" onsubmit="event.preventDefault()">
+              <input type="email" placeholder="you@company.com" class="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20" />
+              <button type="submit" class="btn-funky rounded-full px-4 py-2 text-xs font-semibold">Subscribe</button>
+            </form>
+          </div>
+        </div>
+        <div class="mt-10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+          <span>© 2025 Helpdesk‑AI. All rights reserved.</span>
+          <div class="flex items-center gap-4">
+            <a class="hover:text-slate-300" href="/privacy">Privacy</a>
+            <a class="hover:text-slate-300" href="/terms">Terms</a>
+            <a class="hover:text-slate-300" href="https://x.com/helpdeskai">X</a>
+            <a class="hover:text-slate-300" href="https://discord.gg/helpdeskai">Discord</a>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script>
       // Load funky effects
@@ -435,7 +836,7 @@
           historyList.innerHTML = '';
           items.forEach((item, index) => {
             const card = document.createElement('button');
-            card.className = 'group rounded-xl border border-white/10 bg-white/5 p-3 text-left transition hover:bg-white/10 hover:scale-[1.02] hover:shadow-lg tilt stagger-item';
+            card.className = 'group rounded-2xl border border-white/10 bg-white/5 p-4 text-left transition hover:bg-white/10 hover:-translate-y-1 hover:shadow-[0_25px_60px_-40px_rgba(56,189,248,0.55)] tilt stagger-item';
             card.style.animationDelay = `${index * 80}ms`;
             card.innerHTML = `
               <div class="flex items-start gap-2 mb-2">
@@ -491,7 +892,7 @@
           });
           
           // Trigger stagger animation
-          staggerAnimation('.stagger-item', 'animate-in', 80);
+          {# staggerAnimation('.stagger-item', 'animate-in', 80); #}
         } catch (e) {
           console.error('Failed to load history', e);
           historyList.innerHTML = '<div class="text-rose-300 fade-in">Failed to load history.</div>';
@@ -987,6 +1388,136 @@
           executeAIAction(action);
         });
       });
+
+      const heroRemoteCTA = document.getElementById('heroRemoteCTA');
+      if (heroRemoteCTA && connectBtn) {
+        heroRemoteCTA.addEventListener('click', () => {
+          connectBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => {
+            if (connectionState === 'disconnected') {
+              connectBtn.click();
+            }
+          }, 500);
+        });
+      }
+
+      const openHistoryModalCta = document.getElementById('openHistoryModalCta');
+      if (openHistoryModalCta) {
+        openHistoryModalCta.addEventListener('click', () => {
+          openModal(`
+            <div class="space-y-4">
+              <div class="pop-in">
+                <div class="mb-2 text-xs uppercase tracking-wide text-slate-400 flex items-center gap-2">
+                  <span>👤</span> User prompt
+                </div>
+                <div class="rounded-2xl border border-fuchsia-400/30 bg-fuchsia-400/10 p-4 text-sm text-slate-200">
+                  My VPN keeps disconnecting every 15 minutes. Can you stabilize it?
+                </div>
+              </div>
+              <div class="pop-in delay-1">
+                <div class="mb-2 text-xs uppercase tracking-wide text-slate-400 flex items-center gap-2">
+                  <span>🤖</span> AI Resolution
+                </div>
+                <div class="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-sm text-slate-200 space-y-2">
+                  <p>• Verified adapter drivers and power management.</p>
+                  <p>• Reset Winsock catalog and refreshed DHCP lease.</p>
+                  <p>• Applied always-on profile and monitored stability for 5 minutes.</p>
+                  <p class="text-emerald-300">Status: Stable for 42 minutes with heartbeat confirmation.</p>
+                </div>
+              </div>
+            </div>
+          `);
+        });
+      }
+
+      const remoteLearnMore = document.getElementById('remoteLearnMore');
+      if (remoteLearnMore) {
+        remoteLearnMore.addEventListener('click', () => {
+          openModal(`
+            <div class="space-y-4">
+              <div class="pop-in">
+                <div class="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-sm text-slate-200">
+                  <p class="text-xs uppercase tracking-wide text-cyan-200 mb-2">Audit Snapshot</p>
+                  <p>AI session authenticated via device certificate. Commands executed under least-privilege service account with full transcript recorded.</p>
+                </div>
+              </div>
+              <div class="pop-in delay-1">
+                <div class="rounded-2xl border border-white/10 bg-black/30 p-4 font-mono text-xs text-slate-200 space-y-1">
+                  <div><span class="text-amber-300">12:04:11</span> dism /online /cleanup-image /restorehealth</div>
+                  <div><span class="text-amber-300">12:06:18</span> sfc /scannow</div>
+                  <div><span class="text-amber-300">12:14:02</span> netsh interface ipv4 set subinterface "Wi-Fi" mtu=1400 store=persistent</div>
+                  <div><span class="text-emerald-300">12:15:45</span> ✅ Issue resolved. Packet loss < 1%.</div>
+                </div>
+              </div>
+            </div>
+          `);
+        });
+      }
+
+      const experienceButtons = document.querySelectorAll('[data-experience-step]');
+      const experienceTitle = document.getElementById('experienceTitle');
+      const experienceDescription = document.getElementById('experienceDescription');
+      const experienceElapsed = document.getElementById('experienceElapsed');
+      const experienceProgress = document.getElementById('experienceProgress');
+      const experienceTimestamp = document.getElementById('experienceTimestamp');
+
+      function setExperienceState(button) {
+        if (!button || !experienceTitle || !experienceDescription || !experienceProgress) return;
+        experienceButtons.forEach(btn => {
+          btn.classList.remove('ring-1', 'ring-sky-400/50', 'bg-sky-400/10');
+        });
+        button.classList.add('ring-1', 'ring-sky-400/50', 'bg-sky-400/10');
+        experienceTitle.textContent = button.dataset.title || '';
+        experienceDescription.textContent = button.dataset.description || '';
+        const progress = button.dataset.progress ? parseInt(button.dataset.progress, 10) : 0;
+        experienceProgress.style.width = `${progress}%`;
+        if (experienceElapsed) experienceElapsed.textContent = button.dataset.elapsed || '—';
+        if (experienceTimestamp) experienceTimestamp.textContent = `${button.dataset.elapsed || '—'} elapsed`;
+      }
+
+      experienceButtons.forEach(button => {
+        button.addEventListener('click', () => setExperienceState(button));
+        button.addEventListener('mouseenter', () => setExperienceState(button));
+      });
+      if (experienceButtons.length) setExperienceState(experienceButtons[0]);
+
+      const tickerLabel = document.getElementById('tickerLabel');
+      const tickerTime = document.getElementById('tickerTime');
+      const tickerMessage = document.getElementById('tickerMessage');
+      const tickerCountdown = document.getElementById('tickerCountdown');
+
+      const tickerEvents = [
+        { label: 'Session #4821', time: '12s ago', message: 'AI re-established VPN tunnels for remote workforce in Singapore.' },
+        { label: 'Playbook • Patch Tuesday', time: '28s ago', message: '18 laptops updated to latest security baseline; 0 user interruptions detected.' },
+        { label: 'Escalation avoided', time: '45s ago', message: 'Proactive disk cleanup freed 4.8 GB, preventing Sev-2 storage outage.' },
+        { label: 'Satisfaction pulse', time: '1m 10s ago', message: '👩‍💻  Laura rated last fix 5/5 — “Faster than calling support, thank you!”' }
+      ];
+      let tickerIndex = 0;
+      let countdown = 10;
+
+      function swapTicker() {
+        if (!tickerLabel || !tickerTime || !tickerMessage) return;
+        const event = tickerEvents[tickerIndex % tickerEvents.length];
+        [tickerLabel, tickerTime, tickerMessage].forEach(el => el.classList.add('opacity-0'));
+        setTimeout(() => {
+          tickerLabel.textContent = event.label;
+          tickerTime.textContent = event.time;
+          tickerMessage.textContent = event.message;
+          [tickerLabel, tickerTime, tickerMessage].forEach(el => el.classList.remove('opacity-0'));
+        }, 200);
+        tickerIndex++;
+      }
+
+      if (tickerCountdown) tickerCountdown.textContent = countdown.toString();
+      setInterval(() => {
+        countdown -= 1;
+        if (countdown <= 0) {
+          swapTicker();
+          countdown = 10;
+        }
+        if (tickerCountdown) tickerCountdown.textContent = countdown.toString().padStart(2, '0');
+      }, 1000);
+      swapTicker();
 
       // Initialize connection UI
       updateConnectionUI('disconnected');
